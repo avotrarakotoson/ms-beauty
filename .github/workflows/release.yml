@@ -1,4 +1,5 @@
 name: Release Ms Beauty
+
 on:
   push:
     tags:
@@ -11,9 +12,9 @@ jobs:
       RELEASE_UPLOAD_ID: ${{ steps.create_release.outputs.id }}
 
     steps:
+      - uses: actions/checkout@v2
       - name: Query version number
         id: get_version
-      - uses: actions/checkout@v2
         shell: bash
         run: |
           echo "using version tag ${GITHUB_REF:10}"
@@ -21,7 +22,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-      - uses: actions/create-release@v1
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -39,14 +40,13 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup node
-      - uses: actions/setup-node@v1
+        uses: actions/setup-node@v1
         with:
           node-version: 16
 
       - name: Install Rust stable
-      - uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
 
@@ -72,7 +72,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
       - name: Yarn cache
-      - uses: actions/cache@v2
+        uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -85,17 +85,15 @@ jobs:
     needs: [create-release, build-ms-beauty]
 
     steps:
-      - uses:
+      - uses: actions/checkout@v2
       - run: yarn
       - run: yarn updater
         env:
-          GITHUB_TOKEN: {{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy install.json
-      - uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./updater
           force_orphan: true
-
-
