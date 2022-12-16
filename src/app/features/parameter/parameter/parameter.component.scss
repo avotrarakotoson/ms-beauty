@@ -1,0 +1,19 @@
+.ms-user {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+}
+
+.ms-table-fix-height {
+  height: 100px;
+  overflow: auto;
+}
+
+.ms-contact-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+h1 {
+  border-bottom: 1px solid #000;
+}

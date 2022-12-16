@@ -1,0 +1,203 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ms-beauty-primary: mat.define-palette(mat.$indigo-palette);
+$ms-beauty-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ms-beauty-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ms-beauty-theme: mat.define-light-theme((
+  color: (
+    primary: $ms-beauty-primary,
+    accent: $ms-beauty-accent,
+    warn: $ms-beauty-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($ms-beauty-theme);
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.ms-container {
+  padding: 25px 15px;
+  min-height: calc(100vh - 114px);
+}
+
+.ms-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ms-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.ms-flex-center {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.ms-flex-between {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.ms-flex-start-center {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ms-grid {
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.ms-grid-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.ms-wspacer {
+  width: 10px;
+  ::after {
+    content: '-';
+  }
+}
+
+.ms-hspacer {
+  height: 10px;
+}
+
+.ms-button-row {
+  display: flex;
+  align-items: center;
+}
+
+.ms-card {
+  width: 250px;
+  height: 190px;
+  cursor: pointer;
+
+  &:hover {
+    background: #E9E9E9;
+  }
+
+  &-title {
+    font-size: larger;
+    font-weight: 800;
+  }
+
+  &-content {
+    padding-top: 15px !important;
+  }
+}
+
+.ms-toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.ms-label {
+  font-size: large;
+}
+
+.ms-menu-title {
+  margin: 0 2px;
+  font-weight: bolder;
+}
+
+.ms-full-width {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  max-height: 40vh;
+}
+
+.mat-column-username {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 28% !important;
+  width: 28% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+// Material table
+.mat-mdc-row .mat-mdc-cell {
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #E9E9E975;
+}
+
+.ms-table-wrap {
+  height: 70vh;
+  overflow: scroll;
+}
+
+h1 {
+  margin-bottom: 5px!important;
+}
+
+.ms-full {
+  width: 100%;
+}
+
+.ms-demi {
+  width: 49%;
+}
+
+.ms-form-fields {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ms-actions {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 99;
+}

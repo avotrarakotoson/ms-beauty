@@ -1,0 +1,16 @@
+<div class="ms-home">
+  <div class="ms-flex-center">
+    <ng-container *ngIf="prestations$ | async as prestations">
+      <mat-card class="ms-card" *ngFor="let prestation of prestations" (click)="soldPrestationModal(prestation)">
+        <mat-card-header>
+          <mat-card-title class="ms-card-title">{{ prestation.title }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ms-card-content">
+          <mat-chip-listbox aria-label="Prestation selection">
+            <mat-chip *ngFor="let item of prestation.items">{{ item }}</mat-chip>
+          </mat-chip-listbox>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
+</div>

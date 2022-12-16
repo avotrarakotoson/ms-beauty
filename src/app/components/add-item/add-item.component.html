@@ -1,0 +1,17 @@
+<div class="ms-add-item-wrap">
+  <h1 mat-dialog-title class="ms-add-item-title">Formulaire Item</h1>
+  <div mat-dialog-content class="ms-add-item-content">
+    <form [formGroup]="itemForm">
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Label</mat-label>
+          <input matInput formControlName="label" required>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions class="ms-add-item-actions">
+    <button mat-raised-button (click)="cancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+  </div>
+</div>

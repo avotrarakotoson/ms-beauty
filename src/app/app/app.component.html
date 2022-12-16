@@ -1,0 +1,47 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer mode="over" position="end">
+    <div class="ms-notifications">
+      <h1>Notification</h1>
+    </div>
+  </mat-drawer>
+
+  <mat-toolbar>
+    <span>MS Beauty</span>
+    <span class="ms-toolbar-spacer"></span>
+    <div class="ms-button-row">
+      <button class="ms-menu-title" mat-flat-button [routerLink]="['/']" routerLinkActive="router-link-active">Accueil</button>
+      <button class="ms-menu-title" mat-flat-button [routerLink]="['/ms-parameter']" routerLinkActive="router-link-active">Paramètre</button>
+      <button class="ms-menu-title" mat-flat-button [routerLink]="['/ms-dashboard']" routerLinkActive="router-link-active">Tableau de board</button>
+      <button class="ms-menu-title" mat-icon-button (click)="drawer.toggle()">
+        <mat-icon matBadge="15" matBadgeColor="warn" aria-hidden="false" fontIcon="notifications"></mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <div class="ms-container">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="ms-actions">
+    <div class="example-button-container">
+      <button mat-fab color="primary" [matMenuTriggerFor]="menu" aria-label="Ajout client ou prestation">
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="addItemModal()">
+          <mat-icon>category</mat-icon>
+          <span>Item</span>
+        </button>
+        <button mat-menu-item (click)="addUserModal()">
+          <mat-icon>people</mat-icon>
+          <span>Client</span>
+        </button>
+        <button mat-menu-item (click)="addPrestationModal()">
+          <mat-icon>dialpad</mat-icon>
+          <span>Prestation</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-drawer-container>

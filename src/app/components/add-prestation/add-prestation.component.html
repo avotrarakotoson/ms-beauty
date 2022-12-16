@@ -1,0 +1,45 @@
+<div class="ms-add-prestation-wrap">
+  <h1 mat-dialog-title class="ms-add-prestation-title">Formulaire prestation</h1>
+  <div mat-dialog-content class="ms-add-prestation-content">
+    <form [formGroup]="prestationForm">
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" required>
+        </mat-form-field>
+      </div>
+
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Services</mat-label>
+          <mat-select formControlName="items" multiple>
+            <mat-option *ngFor="let service of services$ | async" [value]="service.label">{{service.label}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Tarif</mat-label>
+          <input matInput type="number" formControlName="rate" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Devise</mat-label>
+          <input matInput formControlName="currency">
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions class="ms-add-prestation-actions">
+    <button mat-raised-button (click)="cancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+  </div>
+</div>

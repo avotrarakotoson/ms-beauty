@@ -1,0 +1,57 @@
+<div class="ms-add-user-wrap">
+  <h1 mat-dialog-title class="ms-add-user-title">Formulaire client</h1>
+  <div mat-dialog-content class="ms-add-user-content">
+    <form [formGroup]="userForm">
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="lastName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Prénoms</mat-label>
+          <input matInput formControlName="firstName">
+        </mat-form-field>
+      </div>
+
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Date de naissance</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dob">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Sexe</mat-label>
+          <mat-select formControlName="gender" required>
+            <mat-option>-- Sexe --</mat-option>
+            <mat-option value="Homme">Homme</mat-option>
+            <mat-option value="Femme">Femme</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email">
+        </mat-form-field>
+      </div>
+
+      <div class="ms-form-fields">
+        <mat-form-field appearance="fill" class="ms-full">
+          <mat-label>Téléphone</mat-label>
+          <input matInput type="text" formControlName="primaryPhone">
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions class="ms-add-user-actions">
+    <button mat-raised-button (click)="cancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+  </div>
+</div>
