@@ -21,7 +21,7 @@ export default function updatelog(tag, type = 'updater') {
     if (reTag.test(line)) {
       _tag = line.slice(3).trim();
       if (!tagMap[_tag]) {
-        tagMap [ _tag ]  =  [ ] ;
+        tagMap [_tag]  =  [] ;
         return;
       }
     }
