@@ -33,9 +33,6 @@ jobs:
           sudo apt-get install -y webkit2gtk-4.0
       - run: yarn
 
-      - name: build guijs for tauri app
-        run: yarn build
-
       - name: build ms-beauty app
         run: yarn tauri:bundle
 
@@ -126,16 +123,14 @@ jobs:
           sudo apt-get install -y webkit2gtk-4.0
       - run: yarn
 
-      - name: build ms-beauty for tauri app
-        run: yarn build
-
       - name: build tauri app
         run: yarn tauri:bundle
 
       - name: compress (macos only)
         if: matrix.platform == 'macos-latest'
-        working-directory: ${{ format('./src-tauri/target/release/{0}', matrix.buildFolder ) }}
-        run: tar -czf ${{ format('ms-beauty{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('ms-beauty{0}', matrix.ext ) }}
+        run: |
+          cd target/${{ matrix.target }}/release
+          tar -czf ${{ format('ms-beauty{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('ms-beauty{0}', matrix.ext ) }}
 
       - name: upload release asset
         id: upload-release-asset
