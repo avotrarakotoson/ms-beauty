@@ -14,9 +14,6 @@ fn main() {
         .expect("error while running OhMyBox application");
 
     app.run(|_app_handle, event| match event {
-        tauri::RunEvent::Updater(updater_event) => {
-            dbg!(updater_event);
-        }
         _ => {}
     })
 }
