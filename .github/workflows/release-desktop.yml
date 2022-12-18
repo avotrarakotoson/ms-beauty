@@ -1,6 +1,8 @@
 on:
   push:
     branches: ["main"]
+    tags:
+      - 'v*'
 
 jobs:
   release:
@@ -72,7 +74,23 @@ jobs:
           files: |
             src-tauri/target/release/bundle/ms-beauty${{ env.PACKAGE_VERSION }}.tar.gz
 
+      - name: Releasing artifacts (ubuntu)
+        if: matrix.platform == 'ubuntu-20.04'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            src-tauri/target/release/bundle/appimage/ms-beaty_${{ env.RELEASE_VERSION }}_amd64.AppImage
+            src-tauri/target/release/bundle/deb/ms-beauty_${{ env.RELEASE_VERSION }}_amd64.deb
+
+      - name: Releasing artifacts (windows)
+        if: matrix.platform == 'windows-latest'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            src-tauri/target/release/bundle/msi/Ms_Beauty_x64_en-US.msi
+
       - name: "✏️ Generate release changelog"
+        if: matrix.platform == 'ubuntu-20.04'
         uses: heinrichreimer/github-changelog-generator-action@v2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
