@@ -35,7 +35,6 @@ jobs:
 
       - name: build guijs for tauri app
         run: yarn build
-      - run: cargo install tauri-bundler --force
 
       - name: build ms-beauty app
         run: yarn tauri:bundle
@@ -129,7 +128,6 @@ jobs:
 
       - name: build ms-beauty for tauri app
         run: yarn build
-      - run: cargo install tauri-bundler --force
 
       - name: build tauri app
         run: yarn tauri:bundle
