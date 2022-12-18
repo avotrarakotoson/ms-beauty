@@ -65,15 +65,15 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           cd src-tauri/target/release/bundle
-          rm -f ms-beauty_${{ env.PACKAGE_VERSION }}.tar.gz
-          tar -czvf ms-beauty_${{ env.PACKAGE_VERSION }}.tar.gz "macos/Ms Beauty.app"
+          rm -f ms-beauty${{ env.PACKAGE_VERSION }}.tar.gz
+          tar -czvf ms-beauty${{ env.PACKAGE_VERSION }}.tar.gz "macos/Ms Beauty.app"
 
       - name: Releasing artifacts (macos)
         if: matrix.platform == 'macos-latest'
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            src-tauri/target/release/bundle/ms-beauty_${{ env.PACKAGE_VERSION }}.tar.gz
+            src-tauri/target/release/bundle/ms-beauty${{ env.PACKAGE_VERSION }}.tar.gz
 
       - name: Releasing artifacts (ubuntu)
         if: matrix.platform == 'ubuntu-20.04'
