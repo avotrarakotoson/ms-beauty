@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-20.04, macos-latest, windows-latest]
+        platform: ubuntu-20-04
     runs-on: ${{ matrix.platform }}
     timeout-minutes: 30
 
@@ -19,6 +19,12 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
