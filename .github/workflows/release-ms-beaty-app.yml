@@ -89,7 +89,7 @@ jobs:
             ext: .app
             compressed: .tgz
           - platform: windows-latest
-            buildFolder: ''
+            buildFolder: 'bundle/msi'
             ext: .x64.msi
             compressed: ''
 
@@ -129,7 +129,7 @@ jobs:
       - name: compress (macos only)
         if: matrix.platform == 'macos-latest'
         run: |
-          cd target/${{ matrix.target }}/release
+          cd target/release/${{ matrix.target }}
           tar -czf ${{ format('ms-beauty{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('ms-beauty{0}', matrix.ext ) }}
 
       - name: upload release asset
