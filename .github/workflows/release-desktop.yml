@@ -82,12 +82,17 @@ jobs:
             src-tauri/target/release/bundle/appimage/ms-beauty_${{ env.PACKAGE_VERSION }}_amd64.AppImage
             src-tauri/target/release/bundle/deb/ms-beauty_${{ env.PACKAGE_VERSION }}_amd64.deb
 
+      - name: Hash files (windows)
+        if: matrix.platform == 'windows-latest'
+        run: |
+           move src-tauri/target/release/bundle/msi/Ms*.msi src-tauri/target/release/bundle/msi/MS_Beauty_x64_en-US.msi
+
       - name: Releasing artifacts (windows)
         if: matrix.platform == 'windows-latest'
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            src-tauri/target/release/bundle/msi/Ms Beauty_${{ env.PACKAGE_VERSION }}_x64_en-US.msi
+            src-tauri/target/release/bundle/msi/MS_Beauty_x64_en-US.msi
 
       - name: "✏️ Generate release changelog"
         if: matrix.platform == 'ubuntu-20.04'
