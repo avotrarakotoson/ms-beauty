@@ -7,8 +7,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ubuntu-20.04
-    runs-on: ${{ matrix.platform }}
+        include:
+          archive: tar.gz tar.xz
+    runs-on: ubuntu-20.04
     timeout-minutes: 30
 
     steps:
