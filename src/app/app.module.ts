@@ -13,6 +13,7 @@ import * as fromCustomer from './store/reducers/customer.reducer';
 import * as fromItem from './store/reducers/item.reducer';
 import * as fromPrestation from './store/reducers/prestation.reducer';
 import * as fromPrestationSales from './store/reducers/prestation-sales.reducer';
+import * as fromAgenda from './store/reducers/agenda.reducer';
 
 import { CustomerEffects } from './store/effects/customer.effects';
 import { PrestationEffects } from './store/effects/prestation.effects';
@@ -32,6 +33,8 @@ import { PrestationsComponent } from './pages/prestations/prestations.component'
 import { SalesComponent } from './pages/sales/sales.component';
 import { AgendaComponent } from './pages/agenda/agenda.component';
 import { ReportsComponent } from './pages/reports/reports.component';
+import { AgendaService } from './core/services/agenda.service';
+import { AgendaEffects } from './store/effects/agenda.effects';
 
 const components = [
   HomeComponent,
@@ -58,11 +61,12 @@ const components = [
       [fromPrestation.prestationFeatureKey]: fromPrestation.reducer,
       [fromPrestationSales.prestationSalesFeatureKey]: fromPrestationSales.reducer,
       [fromItem.itemFeatureKey]: fromItem.reducer,
+      [fromAgenda.agendaFeatureKey]: fromAgenda.reducer,
     }, {}),
-    EffectsModule.forRoot([CustomerEffects, ItemEffects, PrestationEffects, PrestationSalesEffects]),
+    EffectsModule.forRoot([CustomerEffects, ItemEffects, PrestationEffects, PrestationSalesEffects, AgendaEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
-  providers: [DatePipe, CustomerService, ItemService, PrestationService, SoldPrestationService],
+  providers: [DatePipe, CustomerService, ItemService, PrestationService, SoldPrestationService, AgendaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

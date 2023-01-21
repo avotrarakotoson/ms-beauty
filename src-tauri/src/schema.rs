@@ -1,6 +1,24 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    agendas (id) {
+        id -> Integer,
+        agenda_date -> Text,
+        comment -> Nullable<Text>,
+        customer_id -> Nullable<Integer>,
+    }
+}
+
+diesel::table! {
+    agendas_details (id) {
+        id -> Integer,
+        agenda_id -> Nullable<Integer>,
+        title -> Text,
+        items -> Text,
+    }
+}
+
+diesel::table! {
     customers (id) {
         id -> Integer,
         first_name -> Nullable<Text>,
@@ -53,10 +71,14 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(agendas -> customers (customer_id));
+diesel::joinable!(agendas_details -> agendas (agenda_id));
 diesel::joinable!(sales -> customers (customer_id));
 diesel::joinable!(sales_details -> sales (sale_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
+    agendas,
+    agendas_details,
     customers,
     items,
     prestations,

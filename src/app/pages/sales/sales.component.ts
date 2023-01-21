@@ -130,8 +130,6 @@ export class SalesComponent {
   }
 
   reset() {
-    console.log('Here...');
-
     this.soldPrestations = [];
     this.reduction = 0;
     this.setTotal();

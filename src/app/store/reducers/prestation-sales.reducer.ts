@@ -7,12 +7,14 @@ export const prestationSalesFeatureKey = 'prestationSold';
 export interface SoldPrestationState {
   loading: boolean;
   data: PrestationSold[],
+  dataByCustomer: PrestationSold[],
   error: string
 }
 
 export const initialState: SoldPrestationState = {
   loading: false,
   data: [],
+  dataByCustomer: [],
   error: ''
 };
 
@@ -24,7 +26,8 @@ export const reducer = createReducer(
     SoldPrestationActions.mSBeautyPrestationSoldByCustomer,
     (state) => ({
       ...state,
-      loading: true
+      loading: true,
+      dataByCustomer: []
     })
   ),
   on(
@@ -34,7 +37,8 @@ export const reducer = createReducer(
     (state, { error }) => ({
       ...state,
       loading: false,
-      error: error
+      error: error,
+      dataByCustomer: []
     })
   ),
   on(
@@ -58,7 +62,7 @@ export const reducer = createReducer(
     (state, { data }) => ({
       ...state,
       loading: false,
-      data: [...data],
+      dataByCustomer: [...data],
     })
   ),
 );

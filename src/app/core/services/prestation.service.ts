@@ -78,6 +78,8 @@ export class PrestationService {
   prestations: Prestation[] = PRESTATION_DATA;
 
   getAll(): Observable<Prestation[]> {
+    // return of(this.prestations);
+
     return from(invoke('get_all_prestation'))
       .pipe(
         map((results: any) => {

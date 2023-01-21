@@ -10,7 +10,7 @@ import { mSBeautyCreateCustomer, mSBeautyUpdateCustomer, mSBeautyDeleteCustomer 
 import { mSBeautyPrestationSoldByCustomer } from 'src/app/store/actions/prestation-sales.actions';
 import { CustomerState } from 'src/app/store/reducers/customer.reducer';
 import { selectUsers } from 'src/app/store/selectors/customer.selectors';
-import { selectSoldPrestations } from 'src/app/store/selectors/prestation-sales.selectors';
+import { selectSoldPrestationsByCustomer } from 'src/app/store/selectors/prestation-sales.selectors';
 
 @Component({
   selector: 'msb-customers',
@@ -20,7 +20,7 @@ import { selectSoldPrestations } from 'src/app/store/selectors/prestation-sales.
 export class CustomersComponent {
   displayedColumns: string[] = ['username', 'dob', 'contact', 'next_appointment', 'last_appointment', 'regiter_date', 'action'];
   customers$: Observable<Customer[]> = this.store.select(selectUsers);
-  history$: Observable<PrestationSold[]> = this.store.select(selectSoldPrestations);
+  history$: Observable<PrestationSold[]> = this.store.select(selectSoldPrestationsByCustomer);
 
   today: Date = new Date();
 

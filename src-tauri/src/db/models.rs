@@ -103,3 +103,39 @@ pub struct NewSaleDetails {
   pub rate: f32,
   pub currency: String,
 }
+
+// Sales
+#[derive(Identifiable, Queryable, Associations, Debug, PartialEq, Serialize, Clone)]
+#[diesel(belongs_to(Customer))]
+pub struct Agenda {
+  pub id: i32,
+  pub agenda_date: String,
+  pub comment: Option<String>,
+  pub customer_id: Option<i32>,
+}
+
+#[derive(Insertable, AsChangeset, Serialize, Debug, Clone)]
+#[diesel(table_name = agendas)]
+pub struct NewAgenda {
+  pub agenda_date: String,
+  pub comment: String,
+  pub customer_id: i32,
+}
+
+#[derive(Identifiable, Queryable, Associations, Serialize, PartialEq, Debug, Clone)]
+#[diesel(belongs_to(Agenda))]
+#[diesel(table_name = agendas_details)]
+pub struct AgendaDetails {
+  pub id: i32,
+  pub agenda_id: Option<i32>,
+  pub title: String,
+  pub items: String,
+}
+
+#[derive(Insertable, AsChangeset, Serialize, Debug, Clone)]
+#[diesel(table_name = agendas_details)]
+pub struct NewAgendaDetails {
+  pub agenda_id: i32,
+  pub title: String,
+  pub items: String,
+}

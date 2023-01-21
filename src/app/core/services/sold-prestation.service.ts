@@ -62,6 +62,8 @@ export class SoldPrestationService {
   }
 
   getAllByCustomerId(id: number): Observable<PrestationSold[]> {
+    console.log('Start getting info...');
+
     return from(invoke('get_all_sale_by_customer_id', { id }))
       .pipe(
         map((result: any) => {

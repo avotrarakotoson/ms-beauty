@@ -1,7 +1,6 @@
 use crate::AppState;
 use crate::dtos::{CreateSalePayload};
 use crate::sale;
-use chrono::NaiveDateTime;
 
 #[tauri::command]
 pub fn create_sale_prestation(payload: CreateSalePayload, state: tauri::State<AppState>) -> String {

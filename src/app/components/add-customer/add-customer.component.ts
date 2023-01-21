@@ -22,10 +22,10 @@ export class AddCustomerComponent implements OnInit {
   ) {
     this.data = data;
     this.customerForm = this.formBuilder.group({
-      firstName: [Validators.required],
-      lastName: [Validators.required],
-      gender: [Validators.required],
-      dob: [Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      gender: ['', Validators.required],
+      dob: ['', Validators.required],
       email: [''],
       primaryPhone: ['', Validators.required],
     })

@@ -16,6 +16,7 @@ pub mod customer;
 pub mod item;
 pub mod prestation;
 pub mod sale;
+pub mod agenda;
 
 #[path = "db/models.rs"]
 pub mod models;
@@ -31,6 +32,9 @@ pub mod prestation_command;
 
 #[path = "command/cmd_sale_prestation.rs"]
 pub mod sale_prestation_command;
+
+#[path = "command/cmd_agenda.rs"]
+pub mod agenda_command;
 
 pub struct AppState {
   conn: Mutex<SqliteConnection>,
@@ -64,6 +68,9 @@ fn main() {
         sale_prestation_command::create_sale_prestation,
         sale_prestation_command::get_all_sales,
         sale_prestation_command::get_all_sale_by_customer_id,
+        agenda_command::create_agenda,
+        agenda_command::get_all_agendas,
+        agenda_command::get_all_agenda_by_customer_id,
       ])
       .setup(omb::setup::init)
       .plugin(omb::fs::FsExtra::default())

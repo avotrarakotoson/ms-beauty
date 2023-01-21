@@ -36,6 +36,21 @@ export class CustomerService {
   customers: Customer[] = USER_DATA;
 
   getAll(): Observable<Customer[]> {
+    // return of(this.customers)
+    //   .pipe(
+    //     map((results: Customer[]) => {
+    //       return results.map(item => {
+    //         const { firstName, lastName, ...customer } = item;
+
+    //         return Object.assign(customer, {
+    //           firstName: firstName,
+    //           lastName: lastName,
+    //           fullName: firstName + ' ' + lastName,
+    //         });
+    //       })
+    //     })
+    //   )
+
     return from(invoke('get_all_customer'))
       .pipe(
         map((results: any) => {

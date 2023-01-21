@@ -75,8 +75,6 @@ pub fn list_by_customer_id(conn: &mut SqliteConnection, cid: i32) -> QueryResult
 }
 
 pub fn create(conn: &mut SqliteConnection, payload: CreateSalePayload) -> QueryResult<SaleDto> {
-  use sales::dsl::{id};
-
   let sale_naive_datetime = NaiveDateTime::from_timestamp_millis(payload.sale_date);
   let new_sale = NewSale {
     sale_date: sale_naive_datetime.unwrap(),

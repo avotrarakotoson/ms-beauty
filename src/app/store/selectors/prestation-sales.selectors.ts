@@ -7,3 +7,8 @@ export const selectSoldPrestations = createSelector(
   selectPrestationSoldState,
   (state: SoldPrestationState) => state.data
 );
+
+export const selectSoldPrestationsByCustomer = createSelector(
+  selectPrestationSoldState,
+  (state: SoldPrestationState) => state.dataByCustomer
+);

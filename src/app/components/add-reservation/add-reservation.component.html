@@ -6,7 +6,7 @@
         <div class="ms-form-fields">
           <mat-form-field appearance="fill" class="ms-full-width">
             <mat-label>Date de reservation</mat-label>
-            <input matInput formControlName="startDate" [matDatepicker]="picker">
+            <input [min]="today" matInput formControlName="agendaDate" [matDatepicker]="picker">
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -17,7 +17,7 @@
             <ng-select
               appearance="outline"
               labelForId="client"
-              formControlName="customer"
+              formControlName="customerId"
               [items]="customers$ | async"
               placeholder="Recherche client..."
               bindValue="id"
@@ -34,11 +34,10 @@
             <ng-select
               appearance="outline"
               labelForId="prestation"
-              formControlName="prestation"
+              formControlName="prestations"
               [items]="prestations$ | async"
               [multiple]="true"
               placeholder="Recherche prestation..."
-              bindValue="id"
               bindLabel="title"
               [searchable]="true"
             >
@@ -57,13 +56,42 @@
         <div class="ms-form-fields ms-flex-grow">
           <mat-form-field appearance="fill" class="ms-full-width">
             <mat-label>Commentaire..</mat-label>
-            <textarea matInput name="" id=""></textarea>
+            <textarea matInput formControlName="comment" name="" id=""></textarea>
           </mat-form-field>
         </div>
       </form>
 
       <div class="ms-history">
-        Aucune historique...
+        <ng-container *ngIf="history$ | async as histories">
+          <ng-container *ngIf="histories.length; else noResult">
+            <div class="hitory-wrap">
+              <ng-container *ngFor="let history of histories">
+                <div class="items-wrap">
+                  <mat-icon>done</mat-icon>
+                  <div>
+                    <div class="ms-history-head">
+                      <h3 class="ms-history-time">{{ history.saleDate | date: 'medium' }}</h3>
+                    </div>
+                    <div>
+                      <ul class="ms-history-items">
+                        <li class="item-wrap" *ngFor="let item of history.items">
+                          <label>{{ item.title }}</label>
+                          <div>{{ item.items }}</div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <ng-template #noResult>
+            <div class="hitory-wrap">
+              <span matListItemTitle>Aucune historique....</span>
+            </div>
+          </ng-template>
+        </ng-container>
       </div>
     </div>
   </div>

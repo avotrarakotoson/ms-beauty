@@ -1274,6 +1274,11 @@
   resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-6.0.0.tgz#3ac16d70925955c9f81a53ac0b76b1b5c3213f7d"
   integrity sha512-Lzv1saFduDR9amaC1zeHFb+iBBqGF7Gu+j5O6zTSZarCCWlrc9lgTN7sB6VAQE2XIFfz8s9EzK3UYd/goaKMpA==
 
+"@fullcalendar/interaction@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-6.0.3.tgz#ad968b3dd952076965af260e6da08409330415b6"
+  integrity sha512-HhYn/nY3wPrUbZuHnQmmqlhMxwrhy8l3LS+D1Iz4LEsNpBTUpC2htyVdWZD52zeD12ks4+T+bTncf4bFwjf4jA==
+
 "@fullcalendar/list@^6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-6.0.0.tgz#3b5d30f5e38b92aebf0cd28b4cfcb1da66002961"

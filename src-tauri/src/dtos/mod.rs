@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::{string::String};
 use chrono::NaiveDateTime;
-use crate::models::{SaleDetails};
+use crate::models::{SaleDetails, AgendaDetails};
 
 // Customer DTO
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -69,4 +69,29 @@ pub struct SaleDto {
   pub customer_id: i32,
   pub full_name: String,
   pub items: Vec<SaleDetails>,
+}
+
+// Agenda DTO
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct CreateAgendaPayload {
+  pub agenda_date: String,
+  pub comment: String,
+  pub customer_id: i32,
+  pub prestations: Vec<AgendaDetailPayload>,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct AgendaDetailPayload {
+  pub title: String,
+  pub items: String,
+}
+
+#[derive(Debug, Serialize, Clone)]
+pub struct AgendaDto {
+  pub id: i32,
+  pub agenda_date: String,
+  pub comment: Option<String>,
+  pub customer_id: i32,
+  pub full_name: String,
+  pub prestations: Vec<AgendaDetails>,
 }

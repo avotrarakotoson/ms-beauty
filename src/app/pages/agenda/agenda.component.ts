@@ -1,123 +1,72 @@
+import { selectAgendas } from 'src/app/store/selectors/agenda.selectors';
+import { mSBeautyAgenda } from 'src/app/store/actions/agenda.actions';
+import { DatePipe } from '@angular/common';
+import { mSBeautyCreateAgenda } from 'src/app/store/actions/agenda.actions';
 import { PrestationState } from 'src/app/store/reducers/prestation.reducer';
-import { Observable, of } from 'rxjs';
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import { Observable, of, firstValueFrom } from 'rxjs';
+import { ChangeDetectionStrategy, Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import {MatAccordion} from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AddReservationComponent } from 'src/app/components/add-reservation/add-reservation.component';
 import { CustomerState } from 'src/app/store/reducers/customer.reducer';
+import { CreateAgendaDto } from 'src/app/core/dtos/agenda.dto';
 
 const EVENTS = [
   {
     title: 'Prestation 2',
-    start: '2022-12-18T08:30:00',
-    end: '2022-12-21T10:30:00',
+    date: '2023-01-13',
     fullName: 'Kin Feore'
   },
   {
     title: 'Prestation 2',
-    start: '2022-12-21T09:30:00',
-    end: '2022-12-21T10:30:00',
+    date: '2023-01-14',
     fullName: 'Lyndell Mallabund'
   },
   {
     title: 'Prestation 3',
-    start: '2022-12-22T11:30:00',
-    end: '2022-12-22T10:30:00',
+    date: '2023-01-14',
     fullName: 'Davita Winship'
   },
   {
     title: 'Prestation 4',
-    start: '2022-12-23T08:30:00',
-    end: '2022-12-23T10:30:00',
+    date: '2023-01-15',
     fullName: 'Gray Metzke'
   },
   {
     title: 'Prestation 5',
-    start: '2022-12-23T15:30:00',
-    end: '2022-12-23T13:00:00',
+    date: '2023-01-15',
     fullName: 'Farrah Maddison'
   },
   {
     title: 'Prestation 6',
-    start: '2022-12-24T11:30:00',
-    end: '2022-12-24T10:30:00',
+    date: '2023-01-15',
     fullName: 'Davita Winship'
   },
   {
     title: 'Prestation 7',
-    start: '2022-12-25T09:30:00',
-    end: '2022-12-25T10:30:00',
+    date: '2023-01-16',
     fullName: 'Davita Winship'
   },
   {
     title: 'Prestation 8',
-    start: '2022-12-26T08:30:00',
-    end: '2022-12-26T10:30:00',
+    date: '2023-01-16',
     fullName: 'Mirella Goodliffe'
   },
   {
     title: 'Prestation 9',
-    start: '2022-12-27T14:30:00',
-    end: '2022-12-27T10:30:00',
+    date: '2023-01-16',
     fullName: 'Nelli Wellsman'
   },
   {
     title: 'Prestation 10',
-    start: '2022-12-28T09:30:00',
-    end: '2022-12-28T10:30:00',
+    date: '2023-01-20',
     fullName: 'Davita Winship'
-  },
-]
-
-const USERS = [
-  {
-    id: 1,
-    fullName: 'Davita Winship',
-    phoneNumber: '+231 34 534 33',
-    history: [
-      {
-        id: 1,
-        date: '2022-09-12',
-        title: "Prestation 1",
-        items: ["Shampooing", "Soins", "Brushung"],
-      },
-      {
-        id: 2,
-        date: '2022-10-02',
-        title: "Prestation 2",
-        items: ["Shampooing", "Soins", "Coupe", "Brushung"],
-      },
-      {
-        id: 6,
-        date: '2022-10-08',
-        title: "Prestation 6",
-        items: ["Couleur", "Meches", "Shampooing", "Soins", "Coupe", "Brushung"],
-      },
-    ]
-  },
-  {
-    id: 2,
-    fullName: 'Farrah Maddison',
-    phoneNumber: '+231 32 221 43',
-    history: [
-      {
-        id: 2,
-        date: '2022-10-02',
-        title: "Prestation 2",
-        items: ["Shampooing", "Soins", "Coupe", "Brushung"],
-      },
-      {
-        id: 14,
-        date: '2022-10-12',
-        title: "Prestation 14",
-        items: ["Permanente"],
-      },
-    ]
   },
 ]
 
@@ -125,12 +74,12 @@ const USERS = [
   selector: 'msb-agenda',
   templateUrl: './agenda.component.html',
   styleUrls: ['./agenda.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AgendaComponent {
+export class AgendaComponent implements OnInit {
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin, listPlugin, timeGridPlugin],
+    plugins: [interactionPlugin, dayGridPlugin, listPlugin, timeGridPlugin],
     headerToolbar: {
       left: 'title',
       center: '',
@@ -155,13 +104,14 @@ export class AgendaComponent {
     },
   };
 
-  events$: Observable<any> = of(EVENTS);
-  users = USERS;
+  agendas$: Observable<any> = this.store.select(selectAgendas);
 
   @ViewChild(MatAccordion) accordion: MatAccordion | undefined;
   constructor(
     public dialog: MatDialog,
-    private store: Store<PrestationState|CustomerState>
+    private store: Store<PrestationState|CustomerState>,
+    private datePipe: DatePipe,
+    private cd: ChangeDetectorRef
   ) {
     this.calendarOptions.eventContent = (renderProps) => {
       const html = `
@@ -176,6 +126,10 @@ export class AgendaComponent {
     }
   }
 
+  ngOnInit(): void {
+    this.store.dispatch(mSBeautyAgenda());
+  }
+
   getFullName(value: string | undefined): string {
     if (!value) return '';
 
@@ -185,7 +139,6 @@ export class AgendaComponent {
   addReservationModal() {
     const dialogRef = this.dialog.open(AddReservationComponent, {
       width: '800px',
-      height: '600px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -193,6 +146,19 @@ export class AgendaComponent {
 
       if (item) {
         // TO DO
+        const payload: CreateAgendaDto = {
+          agendaDate: this.datePipe.transform(item.agendaDate, 'YYYY-MM-dd') ?? '',
+          customerId: item.customerId,
+          comment: item.comment,
+          prestations: item.prestations.map((prestation: any) => {
+            return {
+              title: prestation.title,
+              items: prestation.items,
+            };
+          })
+        };
+
+        this.store.dispatch(mSBeautyCreateAgenda({ data: payload }));
       }
     });
   }
