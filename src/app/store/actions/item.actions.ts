@@ -6,12 +6,10 @@ import { Item } from 'src/app/models';
 export const mSBeautyItem = createAction(
   '[Item] MSBeauty Items'
 );
-
 export const mSBeautyItemSuccess = createAction(
   '[Item] MSBeauty Items Success',
   props<{ data: Item[] }>()
 );
-
 export const mSBeautyItemFailure = createAction(
   '[Item] MSBeauty Items Failure',
   props<{ error: string }>()
@@ -31,6 +29,16 @@ export const mSBeautyCreateItemFailure = createAction(
   props<{ error: string }>()
 );
 
-// Update Action
-
 // Delete Action
+export const mSBeautyDeleteItem = createAction(
+  '[Item] MSBeauty Delete Item',
+  props<{ id: number }>()
+);
+export const mSBeautyDeleteItemSuccess = createAction(
+  '[Item] MSBeauty Delete Item Success',
+  props<{ id: number }>()
+);
+export const mSBeautyDeleteItemFailure = createAction(
+  '[Item] MSBeauty Delete Item Failure',
+  props<{ error: string }>()
+);

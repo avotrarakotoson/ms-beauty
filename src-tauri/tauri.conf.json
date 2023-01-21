@@ -61,7 +61,9 @@
     "windows": [
       {
         "fullscreen": false,
+        "minWidth": 1000,
         "height": 800,
+        "minHeight": 800,
         "resizable": true,
         "title": "Ms Beauty",
         "width": 1400,

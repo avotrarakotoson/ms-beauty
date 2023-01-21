@@ -54,4 +54,21 @@ export class PrestationEffects {
         )
     })
   ));
+
+  deletePrestation$ = createEffect(() => this.actions$.pipe(
+    ofType(PrestationActions.mSBeautyDeletePrestation),
+    switchMap(({ id }) => {
+      return this.prestationService.delete(id)
+        .pipe(
+          map((isDeleted) => {
+            if (!isDeleted) {
+              return PrestationActions.mSBeautyDeletePrestationFailure({ error: 'Cannot delete prestation' })
+            }
+
+            return PrestationActions.mSBeautyDeletePrestationSuccess({ id });
+          }),
+          catchError((error) => of(PrestationActions.mSBeautyDeletePrestationFailure({ error: 'Error when delete prestation' })))
+        )
+    })
+  ))
 }

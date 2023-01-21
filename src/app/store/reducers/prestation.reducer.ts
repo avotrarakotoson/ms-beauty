@@ -23,6 +23,7 @@ export const reducer = createReducer(
     PrestationActions.mSBeautyPrestations,
     PrestationActions.mSBeautyCreatePrestation,
     PrestationActions.mSBeautyUpdatePrestation,
+    PrestationActions.mSBeautyDeletePrestation,
     (state) => ({
       ...state,
       loading: true
@@ -32,6 +33,7 @@ export const reducer = createReducer(
     PrestationActions.mSBeautyPrestationsFailure,
     PrestationActions.mSBeautyCreatePrestationFailure,
     PrestationActions.mSBeautyUpdatePrestationFailure,
+    PrestationActions.mSBeautyDeletePrestationFailure,
     (state, { error }) => ({
       ...state,
       loading: false,
@@ -51,7 +53,7 @@ export const reducer = createReducer(
     (state, { data }) => ({
       ...state,
       loading: false,
-      data: [...state.data, data],
+      data: [data, ...state.data],
     })
   ),
   on(
@@ -60,6 +62,14 @@ export const reducer = createReducer(
       ...state,
       loading: false,
       data: updatePrestaion(state.data, data),
+    })
+  ),
+  on(
+    PrestationActions.mSBeautyDeletePrestationSuccess,
+    (state, { id }) => ({
+      ...state,
+      loading: false,
+      data: [...state.data.filter(prestation => prestation.id != id)],
     })
   )
 );

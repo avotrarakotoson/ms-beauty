@@ -37,11 +37,12 @@ $ms-beauty-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.ms-container {
-  padding: 25px 15px;
-  min-height: calc(100vh - 114px);
+.ms-router-link-active {
+  background: #3C2A21!important;
+  opacity: .75!important;
+  color: #fff!important;
 }
 
 .ms-flex {
@@ -103,11 +104,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .ms-button-row {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .ms-card {
-  width: 250px;
-  height: 190px;
+  // width: 250px;
   cursor: pointer;
 
   &:hover {
@@ -120,7 +121,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 
   &-content {
-    padding-top: 15px !important;
+    padding-top: 5px !important;
   }
 }
 
@@ -141,16 +142,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 100%;
 }
 
-table {
-  width: 100%;
-  max-height: 40vh;
-}
-
 .mat-column-username {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 28% !important;
-  width: 28% !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -195,9 +191,103 @@ h1 {
   gap: 10px;
 }
 
+.ms-flex-grow {
+  flex-grow: 1;
+}
+
 .ms-actions {
   position: fixed;
   bottom: 25px;
-  right: 25px;
+  left: 25px;
   z-index: 99;
+}
+
+.ms-content {
+  position: relative;
+  height: calc(100vh - (145px));
+  display: flex;
+  flex-direction: column;
+  padding: 15px 20px;
+  background-color: #FAFAFA;
+
+  .ms-content-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+
+    .ms-left, .ms-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ms-total {
+      padding: 10px 20px;
+      border-right: 4px solid #E9E9E9;
+
+      .count {
+        font-size: xx-large;
+        font-weight: bolder;
+      }
+    }
+
+    .ms-filter {
+      padding: 10px 20px;
+
+      .ms-filter-select {
+        padding: 6px 15px;
+        width: 150px;
+      }
+    }
+
+    .ms-search input {
+      padding: 8px 15px;
+      width: 250px;
+    }
+  }
+
+  .ms-content-table {
+    flex: 1;
+    overflow: auto;
+    background: #fff;
+
+    .listitem, .action-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .listitem mat-icon {
+      margin-right: 5px;
+    }
+  }
+
+  .ms-content-list {
+    flex: 1;
+    overflow: auto;
+    background: #fff;
+    padding: 15px;
+  }
+
+  .ms-content-grid {
+    flex: 1;
+    overflow: auto;
+  }
+}
+
+// Modal
+.ms-modal-wrap {
+  padding-bottom: 10px;
+}
+
+.ms-modal-title {
+
+}
+
+.ms-modal-content {
+
+}
+
+.ms-modal-actions {
+  padding: 0 24px;
 }

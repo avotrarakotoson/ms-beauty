@@ -1,0 +1,40 @@
+.history {
+  .ms-history-content {
+    padding: 10px 15px;
+
+    .hitory-wrap {
+      margin-top: 10px;
+
+      .items-wrap {
+        display: flex;
+        gap: 10px;
+
+        .ms-history-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .ms-history-time {
+            margin: 0;
+            font-weight: bold;
+            font-size: 13px;
+          }
+        }
+
+        .ms-history-items {
+          margin: 5px 0;
+          padding-left: 15px;
+          color: gray;
+
+          .item-wrap {
+            margin-bottom: 5px;
+
+            label {
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+}

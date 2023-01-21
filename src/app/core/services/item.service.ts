@@ -1,99 +1,55 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { invoke } from '@tauri-apps/api';
+import { from, map, Observable } from 'rxjs';
 import { Item } from 'src/app/models';
-import { CreateItemDto, UpdateItemDto } from '../dtos/item.dto';
-
-const ITEM_DATA = [
-  {
-    id: 1,
-    label: "Shampooing",
-  },
-  {
-    id: 2,
-    label: "Soins",
-  },
-  {
-    id: 3,
-    label: "Brushung",
-  },
-  {
-    id: 4,
-    label: "Coupe",
-  },
-  {
-    id: 5,
-    label: "Couleur",
-  },
-  {
-    id: 6,
-    label: "Meches",
-  },
-  {
-    id: 7,
-    label: "Coupe Homme",
-  },
-  {
-    id: 8,
-    label: "Soins seulement",
-  },
-  {
-    id: 9,
-    label: "Defrisage",
-  },{
-    id: 10,
-    label: "Lissage Brésilien",
-  },
-  {
-    id: 11,
-    label: "Soins lissant à l'hyalluronique",
-  },
-  {
-    id: 12,
-    label: "Lissage a l'huile d'olive",
-  },
-  {
-    id: 13,
-    label: "Permanente"
-  }
-]
+import { CreateItemDto } from '../dtos/item.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
-  items: Item[] = ITEM_DATA;
-
-  constructor() { }
-
   getAll(): Observable<Item[]> {
-    return of(this.items);
+    return from(invoke('get_all_item'))
+      .pipe(
+        map((results: any) => {
+          const items: Item[] = JSON.parse(results)
+          return items;
+        })
+      )
   }
 
-  getOne(id: number): Observable<Item | null> {
-    const item = this.items.find(item => item.id === id);
+  getOne(id: number): Observable<Item> {
+    return from(invoke('get_item', { id }))
+      .pipe(
+        map((result: any) => {
+          const itemFromCmd: Item = JSON.parse(result);
 
-    if (!item) return of(null);
-
-    return of(item);
+          return itemFromCmd;
+        })
+      )
   }
 
   create(paylaod: CreateItemDto): Observable<Item> {
-    const item = {
-      id: 2,
-      label: paylaod.label,
-    }
+    return from(invoke('create_item', {
+      payload: {
+        label: paylaod.label
+      }
+    }))
+    .pipe(
+      map((result: any) => {
+        const itemFromCmd: Item = JSON.parse(result);
 
-    this.items = [...this.items, item];
-    return of(item);
+        return itemFromCmd;
+      })
+    )
   }
 
-  update(payload: UpdateItemDto): Observable<boolean> {
-    const { id } = payload;
-    let item = this.items.find(item => item.id === id);
-
-    if (!item) return of(false);
-
-    item = {...item, ...payload};
-    return of(true);
+  delete(id: number): Observable<boolean> {
+    return from(invoke('delete_item', { id }))
+      .pipe(
+        map((result: any) => {
+          return result === 'true';
+        })
+      )
   }
 }

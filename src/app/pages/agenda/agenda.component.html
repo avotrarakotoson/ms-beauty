@@ -1,0 +1,66 @@
+<div class="ms-content">
+  <div class="ms-content-grid">
+    <div class="ms-agenda">
+      <div class="ms-agenda-client">
+        <div class="ms-agenda-header">
+          <div class="title">
+            <label>Client Réservation</label>
+          </div>
+        </div>
+
+        <div class="ms-agenda-sales-content">
+          <div class="content">
+            <ng-container *ngIf="users.length; else noReservation">
+              <mat-accordion multi>
+                <mat-expansion-panel *ngFor="let user of users">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ user.fullName }}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <a [href]="'tel:' + user.phoneNumber">Tèl: {{ user.phoneNumber }}</a>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <ng-container *ngFor="let history of user.history" >
+                    <div class="dc-flex">
+                      <div>
+                        <div for="date">{{ history.date }}</div>
+                        <div for="prestati">{{ history.title }}</div>
+                        <p>{{ history.items }}</p>
+                      </div>
+
+                      <div>
+                        // TO DO
+                      </div>
+                    </div>
+                  </ng-container>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </ng-container>
+
+            <ng-template #noReservation>
+              Aucune reservation en cours...
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="ms-agenda-sales-footer">
+          <button class="ms-full-width" mat-flat-button extended color="primary" aria-label="Ajout reservation" (click)="addReservationModal()">
+            <mat-icon>add</mat-icon>
+            Nouvelle Reservation
+          </button>
+        </div>
+      </div>
+
+      <div class="ms-agenda-agenda">
+        <div class="ms-agenda-wrap">
+          <div class="content">
+            <full-calendar [options]="calendarOptions" [events]="events$ | async">
+            </full-calendar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="ms-modal-wrap">
+  <h1 mat-dialog-title class="ms-modal-title">Confirmation Suppression</h1>
+  <div mat-dialog-content class="ms-modal-content">
+    Êtes-vous sûr(e) de vouloir supprimer <b>{{ label }}</b> ?
+  </div>
+  <div mat-dialog-actions class="ms-modal-actions" align="end">
+    <button mat-raised-button (click)="cancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="delete()">Supprimer</button>
+  </div>
+</div>

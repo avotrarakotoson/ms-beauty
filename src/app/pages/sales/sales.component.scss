@@ -1,0 +1,133 @@
+.ms-sales {
+  display: flex;
+  height: 100%;
+
+  .ms-sales-prestation {
+    flex: 4;
+    overflow: scroll;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+
+    .ms-sales-item-wrap {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      row-gap: 10px;
+      column-gap: 10px;
+    }
+
+    .ms-content-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+
+      .ms-sales-item {
+        padding: 5px 10px;
+        border-radius: 10px;
+        background-color: #1A120B25;
+      }
+    }
+  }
+
+  .ms-sales-sales {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+    background-color: #fff;
+    padding: 10px 15px;
+    margin-top: 10px;
+
+    .ms-sales-sales-header {
+      padding-bottom: 10px;
+
+      .title {
+        margin-bottom: 8px;
+      }
+
+    }
+
+    .ms-sales-sales-content {
+      flex: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      overflow: auto;
+      padding-bottom: 10px;
+      background-color: transparent;
+
+      .item-sold {
+        padding: 5px 15px;
+        border-radius: 5px;
+        background-color: #1A120B25;
+
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 14px;
+          font-weight: bolder;
+
+          svg {
+            cursor: pointer;
+            :hover {
+              fill: red;
+            }
+          }
+        }
+
+        .content {
+          color: #3C2A21;
+          display: flex;
+          justify-content: space-between;
+
+          .description {
+            margin-right: 15px;
+          }
+
+          .rate {
+            width: 100px;
+            text-align: end;
+            font-weight: bolder;
+          }
+        }
+
+        .footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          input {
+            padding: 8px 15px;
+            width: 100%;
+          }
+        }
+      }
+
+      .item-reducer {
+        height: 25px;
+        display: flex;
+        justify-content: space-between;
+
+        input {
+          width: 60px;
+          padding: 5px 10px;
+        }
+      }
+
+      .item-no-result {
+        margin: 25px 0;
+      }
+
+      .item-total {
+        text-align: end;
+        font-weight: bolder;
+      }
+    }
+
+    .ms-sales-sales-footer {
+      padding-top: 10px;
+      background-color: #FFF;
+    }
+  }
+}

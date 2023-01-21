@@ -21,6 +21,7 @@ export const reducer = createReducer(
   on(
     SoldPrestationActions.mSBeautyPrestationSold,
     SoldPrestationActions.mSBeautyCreatePrestationSold,
+    SoldPrestationActions.mSBeautyPrestationSoldByCustomer,
     (state) => ({
       ...state,
       loading: true
@@ -29,6 +30,7 @@ export const reducer = createReducer(
   on(
     SoldPrestationActions.mSBeautyPrestationSoldFailure,
     SoldPrestationActions.mSBeautyPrestationSoldFailure,
+    SoldPrestationActions.mSBeautyPrestationSoldByCustomerFailure,
     (state, { error }) => ({
       ...state,
       loading: false,
@@ -49,6 +51,14 @@ export const reducer = createReducer(
       ...state,
       loading: false,
       data: [...state.data, data],
+    })
+  ),
+  on(
+    SoldPrestationActions.mSBeautyPrestationSoldByCustomerSuccess,
+    (state, { data }) => ({
+      ...state,
+      loading: false,
+      data: [...data],
     })
   ),
 );

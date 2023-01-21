@@ -1,0 +1,75 @@
+<div class="ms-modal-wrap">
+  <h1 mat-dialog-title class="ms-modal-title">Formulaire reservation</h1>
+  <div mat-dialog-content class="ms-modal-content">
+    <div class="ms-modal-reservation-wrap">
+      <form [formGroup]="reservationForm">
+        <div class="ms-form-fields">
+          <mat-form-field appearance="fill" class="ms-full-width">
+            <mat-label>Date de reservation</mat-label>
+            <input matInput formControlName="startDate" [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="ms-form-fields">
+          <div class="ms-full ms-select">
+            <ng-select
+              appearance="outline"
+              labelForId="client"
+              formControlName="customer"
+              [items]="customers$ | async"
+              placeholder="Recherche client..."
+              bindValue="id"
+              bindLabel="fullName"
+              [searchable]="true"
+              (change)="selectHistory($event)"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="ms-form-fields">
+          <div class="ms-full ms-select">
+            <ng-select
+              appearance="outline"
+              labelForId="prestation"
+              formControlName="prestation"
+              [items]="prestations$ | async"
+              [multiple]="true"
+              placeholder="Recherche prestation..."
+              bindValue="id"
+              bindLabel="title"
+              [searchable]="true"
+            >
+              <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                <div>
+                  <label style="font-size: 13px; font-weight: bolder;">{{ item.title }}</label>
+                  <div style="display: flex;flex-wrap: wrap;gap: 2px;font-size: 12px;">
+                    <span style="padding: 2px 4px; background: #FAFAFA;border-radius: 5px;" *ngFor="let element of item.items">{{ element }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="ms-form-fields ms-flex-grow">
+          <mat-form-field appearance="fill" class="ms-full-width">
+            <mat-label>Commentaire..</mat-label>
+            <textarea matInput name="" id=""></textarea>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <div class="ms-history">
+        Aucune historique...
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="ms-modal-actions" align="end">
+    <button mat-raised-button (click)="cancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+  </div>
+</div>

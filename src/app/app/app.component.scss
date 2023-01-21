@@ -1,4 +1,31 @@
-.ms-notifications {
-  padding: 10px 10px;
-  width: 200px;
+.ms-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .ms-header, .ms-footer {
+    height: 64px;
+  }
+
+  .ms-main {
+    flex: 1;
+  }
+
+  .ms-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+  }
+}
+
+.ms-date {
+  padding: 0 15px;
+  font-size: smaller;
+}
+
+.ms-menu-title {
+  background: #19368e!important;
+  opacity: .75!important;
+  color: #fff!important;
 }

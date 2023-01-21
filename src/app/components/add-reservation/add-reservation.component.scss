@@ -1,0 +1,19 @@
+.ms-modal-reservation-wrap {
+  height: 475px;
+  display: flex;
+  gap: 20px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .ms-select {
+      margin-bottom: 15px;
+    }
+  }
+
+  .ms-history {
+    flex: 1;
+  }
+}

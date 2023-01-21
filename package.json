@@ -14,9 +14,7 @@
     "tauri:serve": "tauri dev",
     "tauri:bundle": "tauri build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "updater": "node scripts/updater.mjs",
-    "release": "node scripts/release.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -30,12 +28,18 @@
     "@angular/platform-browser": "^15.0.3",
     "@angular/platform-browser-dynamic": "^15.0.3",
     "@angular/router": "^15.0.3",
+    "@fullcalendar/angular": "^6.0.0",
+    "@fullcalendar/core": "^6.0.0",
+    "@fullcalendar/daygrid": "^6.0.0",
+    "@fullcalendar/list": "^6.0.0",
+    "@fullcalendar/timegrid": "^6.0.0",
     "@ng-select/ng-select": "^10.0.1",
     "@ngrx/effects": "^15.0.0",
     "@ngrx/entity": "^15.0.0",
     "@ngrx/store": "^15.0.0",
     "@ngrx/store-devtools": "^15.0.0",
     "@tauri-apps/api": "^1.2.0",
+    "date-fns": "^2.29.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

@@ -3,15 +3,14 @@ import { createAction, props } from '@ngrx/store';
 import { CreatePrestationDto } from 'src/app/core/dtos/prestation.dto';
 import { Prestation } from 'src/app/models';
 
+// Get Action
 export const mSBeautyPrestations = createAction(
   '[Prestation] MSBeauty Prestations'
 );
-
 export const mSBeautyPrestationsSuccess = createAction(
   '[Prestation] MSBeauty Prestations Success',
   props<{ data: Prestation[] }>()
 );
-
 export const mSBeautyPrestationsFailure = createAction(
   '[Prestation] MSBeauty Prestations Failure',
   props<{ error: string }>()
@@ -31,7 +30,7 @@ export const mSBeautyCreatePrestationFailure = createAction(
   props<{ error: string }>()
 );
 
-// Create Action
+// Update Action
 export const mSBeautyUpdatePrestation = createAction(
   '[Prestation] MSBeauty Update Prestation',
   props<{ data: UpdatePrestationDto }>()
@@ -42,5 +41,19 @@ export const mSBeautyUpdatePrestationSuccess = createAction(
 );
 export const mSBeautyUpdatePrestationFailure = createAction(
   '[Prestation] MSBeauty Update Prestation Failure',
+  props<{ error: string }>()
+);
+
+// Delete Action
+export const mSBeautyDeletePrestation = createAction(
+  '[Prestation] MSBeauty Delete Prestation',
+  props<{ id: number }>()
+);
+export const mSBeautyDeletePrestationSuccess = createAction(
+  '[Prestation] MSBeauty Delete Prestation Success',
+  props<{ id: number }>()
+);
+export const mSBeautyDeletePrestationFailure = createAction(
+  '[Prestation] MSBeauty Delete Prestation Failure',
   props<{ error: string }>()
 );

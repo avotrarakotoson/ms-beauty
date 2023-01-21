@@ -1,0 +1,109 @@
+<div class="ms-content">
+  <div class="ms-content-grid">
+    <div class="ms-sales">
+      <div class="ms-sales-prestation">
+        <div class="ms-sales-search-wrap">
+          <mat-form-field class="ms-full-width" appearance = "outline">
+            <mat-label>Recherche...</mat-label>
+            <input type="text" matInput>
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="ms-sales-item-wrap">
+          <ng-container *ngIf="prestations$ | async as prestations">
+            <mat-card class="ms-card" *ngFor="let prestation of prestations" (click)="soldPrestation(prestation)">
+              <mat-card-header>
+                <mat-card-title class="ms-card-title">{{ prestation.title }}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content class="ms-card-content">
+                <div class="ms-content-wrap">
+                  <span class="ms-sales-item" *ngFor="let item of prestation.items">{{ item }}</span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="ms-sales-sales">
+        <div class="ms-sales-sales-header">
+          <div class="title">
+            <div class="ms-info">
+              <label>Date: {{ date | date: 'MM/dd/YYYY hh:mm' }}</label>
+            </div>
+            <div class="ms-birthday">
+              <mat-icon aria-hidden="false" fontIcon="cake" *ngIf="isBirthday"></mat-icon>
+            </div>
+          </div>
+
+          <div class="ms-form-fields">
+            <div class="ms-full">
+                <ng-select
+                  appearance="outline"
+                  labelForId="client"
+                  [items]="customers$ | async"
+                  [(ngModel)]="customerId"
+                  placeholder="Recherche et ajout client..."
+                  bindValue="id"
+                  bindLabel="fullName"
+                  [searchable]="true"
+                >
+                </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="ms-sales-sales-content">
+          <button mat-flat-button extended color="primary" aria-label="Nouveau client" class="ms-full-width" (click)="addUserModal()">
+            <mat-icon>add</mat-icon>
+            Nouveau client
+          </button>
+
+          <ng-container *ngIf="soldPrestations.length > 0; else noItem">
+            <div class="item-sold" *ngFor="let item of soldPrestations; let index = index">
+              <div class="header">
+                <label for="title">{{ item.title }}</label>
+                <button mat-icon-button (click)="removeSoldPrestation(index)">
+                  <span role="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="#FF597B">
+                      <path d="M6.5 17q-.625 0-1.062-.438Q5 16.125 5 15.5v-10H4V4h4V3h4v1h4v1.5h-1v10q0 .625-.438 1.062Q14.125 17 13.5 17Zm7-11.5h-7v10h7ZM8 14h1.5V7H8Zm2.5 0H12V7h-1.5Zm-4-8.5v10Z"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+
+              <div class="content">
+                <span class="description">{{ getItems(item.items) }}</span>
+                <div class="rate">{{ item.rate }} {{ item.currency | uppercase }}</div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #noItem>
+            <div class="item-no-result">
+              Commencer à choisir une prestation...
+            </div>
+          </ng-template>
+
+          <div class="item-reducer">
+            <mat-slide-toggle [(ngModel)]="isChecked" color="primary">Reduction %</mat-slide-toggle>
+
+            <ng-container *ngIf="isChecked">
+              <input type="number" [(ngModel)]="reduction" (keyup)="setTotal()" placeholder="%">
+            </ng-container>
+          </div>
+
+          <div class="item-total">
+            Total
+            <hr>
+            {{ total.rate }} {{ total.currency }}
+          </div>
+        </div>
+
+        <div class="ms-sales-sales-footer">
+          <button class="ms-full-width" mat-raised-button color="primary" (click)="validateSale()">Valider</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

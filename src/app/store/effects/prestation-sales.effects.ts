@@ -25,6 +25,19 @@ export class PrestationSalesEffects {
     })
   ));
 
+  loadPrestationSoldByCustomer = createEffect(() => this.actions$.pipe(
+    ofType(PrestationSoldActions.mSBeautyPrestationSoldByCustomer),
+    switchMap(({ id }) => {
+      return this.prestationSoldService.getAllByCustomerId(id)
+        .pipe(
+          map((data) => {
+            return PrestationSoldActions.mSBeautyPrestationSoldByCustomerSuccess({ data })
+          }),
+          catchError((error) => of(PrestationSoldActions.mSBeautyPrestationSoldByCustomerFailure({ error })))
+        )
+    })
+  ))
+
   createPrestationSold$ = createEffect(() => this.actions$.pipe(
     ofType(PrestationSoldActions.mSBeautyCreatePrestationSold),
     switchMap(({ data }) => {

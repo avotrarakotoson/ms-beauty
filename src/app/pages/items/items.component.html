@@ -1,0 +1,37 @@
+<div class="ms-content">
+  <div class="ms-content-header">
+    <div class="ms-left">
+      <div class="ms-total">
+        <ng-container *ngIf="items$ | async as items">
+          <span class="count">{{ items.length }}</span> Item(s)
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="ms-right">
+      <div class="ms-search">
+        <input type="text" matInput placeholder="Recherche item ex: Brushing">
+      </div>
+
+      <button mat-flat-button extended color="primary" aria-label="Nouveau item" (click)="addItemModal()">
+        <mat-icon>add</mat-icon>
+        Nouveau item
+      </button>
+    </div>
+  </div>
+
+  <!-- List Items -->
+  <div class="ms-content-list">
+    <mat-chip-grid #chipGrid aria-label="Enter items">
+      <mat-chip-row
+        *ngFor="let item of items$ | async"
+        (removed)="removeItemModal(item)"
+      >
+        {{ item.label }}
+        <button matChipRemove [attr.aria-label]="'remove ' + item">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+  </div>
+</div>

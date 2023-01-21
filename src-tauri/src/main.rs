@@ -3,17 +3,74 @@
   windows_subsystem = "windows"
 )]
 
-mod omb;
+use diesel::SqliteConnection;
+use std::env;
+use std::{sync::Mutex};
+
+
+pub mod omb;
+pub mod db;
+pub mod schema;
+pub mod dtos;
+pub mod customer;
+pub mod item;
+pub mod prestation;
+pub mod sale;
+
+#[path = "db/models.rs"]
+pub mod models;
+
+#[path = "command/cmd_customer.rs"]
+pub mod customer_command;
+
+#[path = "command/cmd_item.rs"]
+pub mod item_command;
+
+#[path = "command/cmd_prestation.rs"]
+pub mod prestation_command;
+
+#[path = "command/cmd_sale_prestation.rs"]
+pub mod sale_prestation_command;
+
+pub struct AppState {
+  conn: Mutex<SqliteConnection>,
+}
 
 fn main() {
-  let context = tauri::generate_context!();
-    let app = tauri::Builder::default()
-        .setup(omb::setup::init)
-        .plugin(omb::fs::FsExtra::default())
-        .build(context)
-        .expect("error while running OhMyBox application");
+  let mut conn = db::establish_connection();
+  db::run_migration(&mut conn);
+  let state = AppState {
+    conn: Mutex::new(conn),
+  };
 
-    app.run(|_app_handle, event| match event {
-        _ => {}
-    })
+  let context = tauri::generate_context!();
+  let app = tauri::Builder::default()
+      .manage(state)
+      .invoke_handler(tauri::generate_handler![
+        customer_command::get_all_customer,
+        customer_command::get_customer,
+        customer_command::create_customer,
+        customer_command::update_customer,
+        customer_command::delete_customer,
+        item_command::get_all_item,
+        item_command::get_item,
+        item_command::create_item,
+        item_command::delete_item,
+        prestation_command::get_all_prestation,
+        prestation_command::get_prestation,
+        prestation_command::create_prestation,
+        prestation_command::update_prestation,
+        prestation_command::delete_prestation,
+        sale_prestation_command::create_sale_prestation,
+        sale_prestation_command::get_all_sales,
+        sale_prestation_command::get_all_sale_by_customer_id,
+      ])
+      .setup(omb::setup::init)
+      .plugin(omb::fs::FsExtra::default())
+      .build(context)
+      .expect("error while running Ms Beauty application");
+
+  app.run(|_app_handle, event| match event {
+      _ => {}
+  });
 }

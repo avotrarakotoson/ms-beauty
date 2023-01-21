@@ -1,63 +1,16 @@
-<div class="ms-sold-prestation-wrap">
-  <h1 mat-dialog-title class="ms-sold-prestation-title">Formulaire prestation</h1>
-  <div mat-dialog-content class="ms-sold-prestation-content">
-    <form [formGroup]="soldPrestationForm">
-      <div class="ms-flex-between">
-        <div class="ms-info">
-          <label>Date: {{ date | date: 'MM/dd/YYYY hh:mm' }}</label>
-          <h2>{{ data.title }}</h2>
-          <p class="ms-sold-prestation-detail">{{ getItems(data.items) }}</p>
-        </div>
-        <div class="ms-birthday">
-          <mat-icon aria-hidden="false" fontIcon="cake" *ngIf="isBirthday"></mat-icon>
-        </div>
-      </div>
-
-      <ng-container *ngIf="users$ | async as users">
-        <div class="ms-form-fields">
-          <div class="ms-full">
-              <label for="client">Client</label>
-              <ng-select
-                appearance="outline"
-                labelForId="client"
-                [items]="users"
-                bindValue="id"
-                bindLabel="fullName"
-                [searchable]="true"
-                formControlName="userId"
-                (change)="onUserChange($event)"
-              >
-              </ng-select>
-              <br/>
-          </div>
-        </div>
-      </ng-container>
-
-      <div class="ms-form-fields">
-        <mat-form-field appearance="fill" class="ms-demi">
-          <mat-label>Tarif</mat-label>
-          <input matInput type="number" formControlName="rate" readonly>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="ms-demi">
-          <mat-label>Devise</mat-label>
-          <input matInput type="text" formControlName="currency" readonly>
-        </mat-form-field>
-      </div>
-
-      <div class="ms-form-fields">
-        <mat-form-field appearance="fill" class="ms-demi">
-          <mat-label>Reduction %</mat-label>
-          <input matInput type="number" formControlName="discount" max="100">
-        </mat-form-field>
-      </div>
-
-      <div class="ms-list-item">Total</div>
-      <mat-divider class="ms-my-10"></mat-divider>
-      <div class="ms-list-item">{{ getTotal() }}</div>
-    </form>
+<div class="ms-modal-wrap">
+  <h1 mat-dialog-title class="ms-modal-title">Confirmation Vente Prestation</h1>
+  <div mat-dialog-content class="ms-modal-content">
+    <p>Êtes-vous sûr(e) de vouloir confirmer ce vente de prestation pour le client <b>{{ fullName }}</b>?</p>
+    <div style="font-size: larger;font-weight: bold; padding-top: 5px">
+      Total: {{ amount }} {{ currency }}
+    </div>
+    <div style="font-size: larger;font-weight: bold; padding-top: 5px">
+      Reduction: {{ reduction }} &percnt;
+    </div>
   </div>
-  <div mat-dialog-actions class="ms-sold-prestation-actions">
+  <div mat-dialog-actions class="ms-modal-actions" align="end">
     <button mat-raised-button (click)="cancel()">Annuler</button>
-    <button mat-raised-button color="primary" (click)="save()">Enregistrer</button>
+    <button mat-raised-button color="primary" (click)="delete()">Enregistrer</button>
   </div>
 </div>

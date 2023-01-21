@@ -21,6 +21,7 @@ export const reducer = createReducer(
   on(
     ItemActions.mSBeautyItem,
     ItemActions.mSBeautyCreateItem,
+    ItemActions.mSBeautyDeleteItem,
     (state) => ({
       ...state,
       loading: true
@@ -29,6 +30,7 @@ export const reducer = createReducer(
   on(
     ItemActions.mSBeautyItemFailure,
     ItemActions.mSBeautyCreateItemFailure,
+    ItemActions.mSBeautyDeleteItemFailure,
     (state, { error }) => ({
       ...state,
       loading: false,
@@ -49,6 +51,14 @@ export const reducer = createReducer(
       ...state,
       loading: false,
       data: [...state.data, data]
+    })
+  ),
+  on(
+    ItemActions.mSBeautyDeleteItemSuccess,
+    (state, { id }) => ({
+      ...state,
+      loading: false,
+      data: [...state.data.filter(item => item.id != id)],
     })
   )
 );

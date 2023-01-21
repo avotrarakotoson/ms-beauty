@@ -27,19 +27,17 @@ export class AddPrestationComponent {
     this.data = data;
     this.prestationForm = this.formBuilder.group({
       title: ['', Validators.required],
-      description: [],
+      description: [''],
       items: [[], Validators.required],
       rate: [0, Validators.required],
-      currency: []
+      currency: ['', Validators.required]
     })
   }
 
   ngOnInit(): void {
     if (this.data) {
       this.prestationForm.patchValue(this.data);
-      this.prestationForm.get('rate')?.setValue(
-        this.data.rates.sort((p1, p2) => (p1.timestamp < p2.timestamp) ? 1 : (p1.timestamp > p2.timestamp) ? -1 : 0)[0].rate
-      )
+      this.prestationForm.get('rate')?.setValue(this.data.rate)
     }
   }
 

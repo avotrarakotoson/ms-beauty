@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Prestation } from 'src/app/models';
+import { invoke } from '@tauri-apps/api';
+import { from, map, Observable, of } from 'rxjs';
+import { Prestation, PrestationFromCmd } from 'src/app/models';
 import { CreatePrestationDto, UpdatePrestationDto } from '../dtos/prestation.dto';
 
 const PRESTATION_DATA = [
@@ -9,129 +10,65 @@ const PRESTATION_DATA = [
     title: "Prestation",
     items: ["Shampooing", "Soins", "Brushung"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
   {
     id: 2,
     title: "Prestation",
     items: ["Shampooing", "Soins", "Coupe", "Brushung"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
   {
     id: 3,
     title: "Prestation",
     items: ["Couleur", "Shampooing", "Soins", "Brushung"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
   {
     id: 4,
     title: "Prestation",
     items: ["Meches", "Shampooing", "Soins", "Brushung"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
   {
     id: 5,
     title: "Prestation",
     items: ["Meches", "Shampooing", "Soins", "Coupe", "Brushung"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
   {
     id: 6,
     title: "Prestation",
     items: ["Couleur", "Meches", "Shampooing", "Soins", "Coupe", "Brushung"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
   {
     id: 7,
     title: "Prestation",
     items: ["Shampooing", "Coupe Homme"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
   {
     id: 8,
     title: "Prestation",
     items: ["Shampooing", "Soins seulement"],
     description: "",
-    rates: [
-      { rate: 2, currency: 'USD', timestamp: 1670950352 }
-    ]
+    rate: 2,
+    currency: 'USD'
   },
-  // {
-  //   id: 9,
-  //   title: "Prestation",
-  //   items: ["Defrisage", "Shampooing", "Soins", "Brushing"],
-  //   description: "",
-  //   rates: [
-  //     { rate: 2, currency: 'USD', timestamp: 1670950352 }
-  //   ]
-  // },
-  // {
-  //   id: 10,
-  //   title: "Prestation",
-  //   items: ["Defrisage", "Shampooing", "Soins", "Coupe", "Brushing"],
-  //   description: "",
-  //   rates: [
-  //     { rate: 2, currency: 'USD', timestamp: 1670950352 }
-  //   ]
-  // },
-  // {
-  //   id: 11,
-  //   title: "Prestation",
-  //   items: ["Lissage Brésilien",],
-  //   description: "",
-  //   rates: [
-  //     { rate: 2, currency: 'USD', timestamp: 1670950352 }
-  //   ]
-  // },
-  // {
-  //   id: 12,
-  //   title: "Prestation",
-  //   items: ["Soins lissant à l\'hyalluronique"],
-  //   description: "",
-  //   rates: [
-  //     { rate: 2, currency: 'USD', timestamp: 1670950352 }
-  //   ]
-  // },
-  // {
-  //   id: 13,
-  //   title: "Prestation",
-  //   items: ["Lissage a l\'huile d\'olive"],
-  //   description: "",
-  //   rates: [
-  //     { rate: 2, currency: 'USD', timestamp: 1670950352 }
-  //   ]
-  // },
-  // {
-  //   id: 14,
-  //   title: "Prestation",
-  //   items: ["Permanente"],
-  //   description: "",
-  //   rates: [
-  //     { rate: 2, currency: 'USD', timestamp: 1670950352 },
-  //     { rate: 2.3, currency: 'USD', timestamp: 1670950342 },
-  //     { rate: 2.1, currency: 'USD', timestamp: 1670950362 },
-  //   ]
-  // },
 ]
 
 @Injectable({
@@ -140,40 +77,81 @@ const PRESTATION_DATA = [
 export class PrestationService {
   prestations: Prestation[] = PRESTATION_DATA;
 
-  constructor() { }
-
   getAll(): Observable<Prestation[]> {
-    return of(this.prestations);
+    return from(invoke('get_all_prestation'))
+      .pipe(
+        map((results: any) => {
+          const prestationsFromCmd: PrestationFromCmd[] = JSON.parse(results)
+
+          return prestationsFromCmd.map(prestationFromCmd => {
+            const { items, ...prestation } = prestationFromCmd;
+
+            return Object.assign(prestation, {
+              items: items.split(',').map(item => item.trim())
+            });
+          })
+        })
+      )
   }
 
   getOne(id: number): Observable<Prestation | null> {
-    const user = this.prestations.find(user => user.id === id);
+    return from(invoke('get_prestation', { id }))
+      .pipe(
+        map((result: any) => {
+          const prestationFromCmd: PrestationFromCmd = JSON.parse(result)
+          const { items, ...prestation } = prestationFromCmd;
 
-    if (!user) return of(null);
-    return of(user);
+          return Object.assign(prestation, {
+            items: items.split(',').map(item => item.trim())
+          });
+        })
+      )
   }
 
-  create(paylaod: CreatePrestationDto): Observable<Prestation> {
-    const rate = { rate: paylaod.rate, currency: paylaod.currency, timestamp: Date.now() }
-    const prestation = {
-      id: 19,
-      title: paylaod.title,
-      description: paylaod.description,
-      items: paylaod.items,
-      rates: [rate],
-    }
+  create(payload: CreatePrestationDto): Observable<Prestation> {
+    return from(invoke('create_prestation', {
+      payload : {
+        title: payload.title,
+        items: payload.items.join(', '),
+        description: payload.description,
+        rate: payload.rate,
+        currency: payload.currency,
+      }
+    }))
+    .pipe(
+      map((result: any) => {
+        const prestationFromCmd: PrestationFromCmd = JSON.parse(result)
+        const { items, ...prestation } = prestationFromCmd;
 
-    this.prestations = [...this.prestations, prestation];
-    return of(prestation);
+        return  Object.assign(prestation, {
+          items: items.split(',').map(item => item.trim())
+        })
+      })
+    )
   }
 
   update(payload: UpdatePrestationDto): Observable<boolean> {
-    const { id } = payload;
-    let prestation = this.prestations.find(prestation => prestation.id === id);
+    return from(invoke('update_prestation', {
+      payload : {
+        id: payload.id,
+        prestation: {
+          title: payload.title,
+          items: payload.items.join(', '),
+          description: payload.description,
+          rate: payload.rate,
+          currency: payload.currency,
+        }
+      }
+    }))
+    .pipe(map((result: any) => result === 'true'));
+  }
 
-    if (!prestation) return of(false);
-
-    prestation = {...prestation, ...payload};
-    return of(true);
+  delete(id: number): Observable<boolean> {
+    return from(invoke('delete_prestation', { id }))
+      .pipe(
+        map((result: any) => {
+          return result === 'true';
+        })
+      )
   }
 }

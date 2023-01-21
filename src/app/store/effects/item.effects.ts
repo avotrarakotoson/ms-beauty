@@ -37,4 +37,21 @@ export class ItemEffects {
         )
     })
   ));
+
+  deleteItem$ = createEffect(() => this.actions$.pipe(
+    ofType(ItemActions.mSBeautyDeleteItem),
+    switchMap(({ id }) => {
+      return this.itemService.delete(id)
+        .pipe(
+          map((isDeleted) => {
+            if (!isDeleted) {
+              return ItemActions.mSBeautyDeleteItemFailure({ error: 'Error when delete item' })
+            }
+
+            return ItemActions.mSBeautyDeleteItemSuccess({ id });
+          }),
+          catchError((error) => of(ItemActions.mSBeautyDeleteItemFailure({ error: 'Error when delete item' })))
+        )
+    })
+  ))
 }

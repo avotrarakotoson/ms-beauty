@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { PrestationSold } from 'src/app/models';
+import { invoke } from '@tauri-apps/api';
+import { from, map, Observable, of } from 'rxjs';
+import { PrestationSold, PrestationSoldFromCmd } from 'src/app/models';
 import { CreateSoldPrestationDto } from '../dtos/sold-prestation.dto';
 
 const PRESTATION_DATA = [
   {
-    id: 1,
-    date: "12/14/2022 02:23",
-    prestation: "Pack 1",
-    fullName: "Avotra Rakotoson",
-    items: ["Permanent, Coupe"],
-    rate: 2,
-    currency: "USD",
-    discount: 5,
-  },
-  {
-    id: 2,
-    date: "12/09/2022 05:23",
-    prestation: "Pack 1",
-    fullName: "Avotra Rakotoson",
-    items: ["Permanent, Soins"],
-    rate: 2,
-    currency: "USD",
-    discount: 10,
+    id: 3,
+    saleDate: "2023-01-20T23:17:42.537",
+    amount: 3.2,
+    reduction: 20,
+    customerId: 1,
+    fullName: 'Avotra Rakotoson',
+    items: [
+      {
+        id: 5,
+        title: "Prestation",
+        items: "Shampooing, Coupe Homme",
+        rate: 2,
+        currency: "USD",
+      },
+      {
+        id: 6,
+        title: "Prestation",
+        items: "Shampooing, Soins seulement",
+        rate: 2,
+        currency: "USD",
+      }
+    ],
   }
 ]
 
@@ -33,29 +38,91 @@ export class SoldPrestationService {
   prestationSold: PrestationSold[] = PRESTATION_DATA;
 
   getAll(): Observable<PrestationSold[]> {
-    return of(this.prestationSold);
+    // return of(this.prestationSold);
+    return from(invoke('get_all_sales'))
+      .pipe(
+        map((result: any) => {
+          const salesPrestation: PrestationSoldFromCmd[] = JSON.parse(result);
+
+          return salesPrestation.map(salePrestation => {
+            const { sale_date, customer_id, full_name, items, ...data } = salePrestation;
+
+            return Object.assign(data, {
+              saleDate: sale_date,
+              customerId: customer_id,
+              fullName: full_name,
+              items: items.map(item => {
+                const { sale_id, ...originItem } = item;
+                return originItem;
+              })
+            });
+          })
+        })
+      )
   }
 
-  getOne(id: number): Observable<PrestationSold | null> {
-    const user = this.prestationSold.find(user => user.id === id);
+  getAllByCustomerId(id: number): Observable<PrestationSold[]> {
+    return from(invoke('get_all_sale_by_customer_id', { id }))
+      .pipe(
+        map((result: any) => {
+          const salesPrestation: PrestationSoldFromCmd[] = JSON.parse(result);
 
-    if (!user) return of(null);
-    return of(user);
+          return salesPrestation.map(salePrestation => {
+            const { sale_date, customer_id, full_name, items, ...data } = salePrestation;
+
+            return Object.assign(data, {
+              saleDate: sale_date,
+              customerId: customer_id,
+              fullName: full_name,
+              items: items.map(item => {
+                const { sale_id, ...originItem } = item;
+                return originItem;
+              })
+            });
+          })
+        })
+      )
+  }
+
+  getOne(id: number): Observable<PrestationSold> {
+    // const user = this.prestationSold.find(user => user.id === id);
+    // return of(user);
+
+    return of();
   }
 
   create(payload: CreateSoldPrestationDto): Observable<PrestationSold> {
-    const prestation: PrestationSold = {
-      id: 19,
-      date: payload.date,
-      prestation: "",
-      fullName: "",
-      items: [],
-      rate: payload.rate,
-      currency: payload.currency,
-      discount: payload.discount,
-    }
+    return from(invoke('create_sale_prestation', {
+      payload : {
+        sale_date: payload.saleDate,
+        amount: payload.amount,
+        reduction: payload.reduction,
+        customer_id: payload.customerId,
+        items: payload.items.map(item => {
+          return {
+            title: item.title,
+            items: item.items.join(', '),
+            rate: item.rate,
+            currency: item.currency
+          };
+        }),
+      },
+    }))
+    .pipe(
+      map((result: any) => {
+        const salesPrestation: PrestationSoldFromCmd = JSON.parse(result);
+        const { sale_date, customer_id, full_name, items, ...data } = salesPrestation;
 
-    this.prestationSold = [...this.prestationSold, prestation];
-    return of(prestation);
+        return Object.assign(data, {
+          saleDate: sale_date,
+          customerId: customer_id,
+          fullName: full_name,
+          items: items.map(item => {
+            const { sale_id, ...originItem } = item;
+            return originItem;
+          })
+        });
+      })
+    )
   }
 }
