@@ -72,7 +72,6 @@ fn main() {
         agenda_command::get_all_agendas,
         agenda_command::get_all_agenda_by_customer_id,
       ])
-      .setup(omb::setup::init)
       .plugin(omb::fs::FsExtra::default())
       .build(context)
       .expect("error while running Ms Beauty application");
