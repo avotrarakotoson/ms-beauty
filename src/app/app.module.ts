@@ -1,5 +1,5 @@
-import { DatePipe } from '@angular/common';
-import { NgModule, isDevMode } from '@angular/core';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import { NgModule, isDevMode, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -35,6 +35,9 @@ import { AgendaComponent } from './pages/agenda/agenda.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { AgendaService } from './core/services/agenda.service';
 import { AgendaEffects } from './store/effects/agenda.effects';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr, 'fr')
 
 const components = [
   HomeComponent,
@@ -49,7 +52,7 @@ const components = [
 @NgModule({
   declarations: [
     AppComponent,
-    ...components,
+    ...components
   ],
   imports: [
     BrowserModule,
@@ -66,7 +69,15 @@ const components = [
     EffectsModule.forRoot([CustomerEffects, ItemEffects, PrestationEffects, PrestationSalesEffects, AgendaEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
-  providers: [DatePipe, CustomerService, ItemService, PrestationService, SoldPrestationService, AgendaService],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'fr' },
+    DatePipe,
+    CustomerService,
+    ItemService,
+    PrestationService,
+    SoldPrestationService,
+    AgendaService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

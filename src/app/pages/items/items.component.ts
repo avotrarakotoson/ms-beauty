@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { debounceTime, filter, map, Observable, mergeAll } from 'rxjs';
 import { AddItemComponent } from 'src/app/components/add-item/add-item.component';
 import { ConfirmDeleteComponent } from 'src/app/components/confirm-delete/confirm-delete.component';
 import { Item } from 'src/app/models';
@@ -15,12 +15,34 @@ import { selectItems } from 'src/app/store/selectors/item.selectors';
   styleUrls: ['./items.component.scss']
 })
 export class ItemsComponent {
-  items$: Observable<Item[]> = this.store.select(selectItems);
+  allItems$: Observable<Item[]> = this.store.select(selectItems);
+  items$: Observable<Item[]> = this.allItems$;
 
   constructor(
     public dialog: MatDialog,
     private store: Store<ItemState>
   ) {}
+
+  searchItem(event: any) {
+    const keyword: string = event.target.value;
+    if (keyword.length > 2) {
+      this.items$ = this.allItems$
+        .pipe(
+          debounceTime(500),
+          map(items => {
+            return items.filter(item => {
+              return this.matchPattern(item.label, keyword);
+            });
+          })
+        )
+    } else {
+      this.items$ = this.allItems$;
+    }
+  }
+
+  matchPattern(target: string, value: string): boolean {
+    return target.toLowerCase().includes(value.toLowerCase());
+  }
 
   addItemModal() {
     const dialogRef = this.dialog.open(AddItemComponent, {

@@ -60,14 +60,13 @@
     },
     "windows": [
       {
-        "fullscreen": false,
-        "minWidth": 1000,
-        "height": 800,
-        "minHeight": 800,
-        "resizable": true,
         "title": "Ms Beauty",
-        "width": 1400,
-        "transparent": true,
+        "fullscreen": false,
+        "center": true,
+        "minWidth": 1140,
+        "minHeight": 760,
+        "resizable": true,
+        "fileDropEnabled": false,
         "label": "main",
         "url": "index.html"
       }

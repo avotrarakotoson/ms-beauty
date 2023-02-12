@@ -1,8 +1,9 @@
 use diesel::prelude::*;
 use diesel::result::Error;
-use crate::models::{Customer, Agenda, NewAgenda, AgendaDetails, NewAgendaDetails};
+use diesel::sql_types::Integer;
+use crate::db::models::{Customer, Agenda, AgendaDate, NewAgenda, AgendaDetails, NewAgendaDetails};
 use crate::schema::{agendas, agendas_details};
-use crate::dtos::{CreateAgendaPayload, AgendaDto};
+use crate::dtos::{CreateAgendaPayload, AgendaDto, AgendaFilter};
 use crate::customer;
 
 pub fn list(conn: &mut SqliteConnection) -> QueryResult<Vec<AgendaDto>> {
@@ -118,4 +119,39 @@ pub fn create(conn: &mut SqliteConnection, payload: CreateAgendaPayload) -> Quer
       }
     )
   })
+}
+
+pub fn last_or_next_meet_date_customer(conn: &mut SqliteConnection, filter: AgendaFilter) -> QueryResult<AgendaDate> {
+  const SQL_QUERY_NEXT_DATE: &str = "
+    SELECT
+      CASE
+        WHEN MIN(agenda_date) IS NOT NULL THEN MIN(agenda_date)
+        ELSE ''
+      END as agenda_date
+    FROM agendas
+    WHERE agenda_date > DATE('now')
+    AND customer_id = ?
+  ";
+
+  const SQL_QUERY_LAST_DATE: &str = "
+    SELECT
+      CASE
+        WHEN MAX(agenda_date)  IS NOT NULL THEN MAX(agenda_date)
+        ELSE ''
+      END as agenda_date
+    FROM agendas
+    WHERE agenda_date < DATE('now')
+    AND customer_id = ?
+  ";
+
+  let query = match filter.is_next {
+    true => SQL_QUERY_NEXT_DATE,
+    false => SQL_QUERY_LAST_DATE,
+  };
+
+  let agenda_date = diesel::sql_query(query)
+      .bind::<Integer, _>(filter.customer_id)
+      .get_result::<AgendaDate>(conn);
+
+  agenda_date
 }

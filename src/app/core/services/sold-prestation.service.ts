@@ -93,14 +93,14 @@ export class SoldPrestationService {
     return of();
   }
 
-  create(payload: CreateSoldPrestationDto): Observable<PrestationSold> {
+  create(soldPrestation: CreateSoldPrestationDto): Observable<PrestationSold> {
     return from(invoke('create_sale_prestation', {
       payload : {
-        sale_date: payload.saleDate,
-        amount: payload.amount,
-        reduction: payload.reduction,
-        customer_id: payload.customerId,
-        items: payload.items.map(item => {
+        sale_date: soldPrestation.saleDate,
+        amount: soldPrestation.amount,
+        reduction: soldPrestation.reduction,
+        customer_id: soldPrestation.customerId,
+        items: soldPrestation.items.map(item => {
           return {
             title: item.title,
             items: item.items.join(', '),

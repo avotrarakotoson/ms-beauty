@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { debounceTime, map, Observable } from 'rxjs';
 import { AddPrestationComponent } from 'src/app/components/add-prestation/add-prestation.component';
 import { ConfirmDeleteComponent } from 'src/app/components/confirm-delete/confirm-delete.component';
 import { UpdatePrestationDto } from 'src/app/core/dtos/prestation.dto';
@@ -17,17 +17,56 @@ import { selectPrestations } from 'src/app/store/selectors/prestation.selectors'
 })
 export class PrestationsComponent {
   displayedColumns: string[] = ['name', 'item', 'price', 'action'];
-  prestations$: Observable<Prestation[]> = this.store.select(selectPrestations);
+  allPrestations$: Observable<Prestation[]> = this.store.select(selectPrestations);
+  prestations$: Observable<Prestation[]> = this.allPrestations$;
+
+  items: string[] = [];
+  tarifSortAsc: boolean = false;
 
   constructor(
     public dialog: MatDialog,
     private store: Store<PrestationState>
   ) {}
 
-  getItems(items: string[]): string {
-    if (!items) return '';
+  searchPrestation(event: any) {
+    const keyword: string = event.target.value;
 
-    return items.join(', ');
+    if (keyword.length > 2) {
+      this.prestations$ = this.allPrestations$
+        .pipe(
+          debounceTime(500),
+          map(prestations => {
+            return prestations.filter(prestation => {
+              if (this.matchPattern(prestation.title, keyword)) return true;
+              if (this.matchPattern(prestation.items.join(', '), keyword)) return true;
+
+              return false;
+            });
+          })
+        )
+    } else {
+      this.prestations$ = this.allPrestations$;
+    }
+  }
+
+  onSort(prestationKey: 'title' | 'rate') {
+    this.prestations$ = this.allPrestations$
+      .pipe(
+        map(prestations => {
+          let sorting = prestations.sort((first, second) => {
+            if(first[prestationKey] < second[prestationKey]) return -1;
+            if(first[prestationKey] > second[prestationKey]) return 1;
+
+            return 0;
+          });
+
+          if (this.tarifSortAsc) {
+            sorting = [...sorting.reverse()];
+          }
+
+          return sorting;
+        })
+      )
   }
 
   addPrestationModal() {
@@ -63,5 +102,11 @@ export class PrestationsComponent {
         this.store.dispatch(mSBeautyDeletePrestation({ id: result }));
       }
     });
+  }
+
+  private matchPattern(target: string, keyword: string): boolean {
+    if (!target || !keyword) return false;
+
+    return !!target.match(new RegExp(keyword, 'gi'));
   }
 }

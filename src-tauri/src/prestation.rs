@@ -1,19 +1,18 @@
 use diesel::prelude::*;
 use diesel::result::Error;
-use crate::models::{Prestation, NewOrUpdatePrestation};
+use crate::db::models::{Prestation, NewOrUpdatePrestation};
 use crate::schema::prestations;
 use crate::dtos::{CreatePrestationPayload, UpdatePrestationPayload};
 
-pub fn list(conn: &mut SqliteConnection) -> String {
-  let all_prestations = prestations::dsl::prestations
+pub fn list(conn: &mut SqliteConnection) -> QueryResult<Vec<Prestation>> {
+  let prestations = prestations::dsl::prestations
       .load::<Prestation>(conn)
       .expect("Error loading prestations");
 
-  let serialized = serde_json::to_string(&all_prestations).unwrap();
-  serialized
+  Ok(prestations)
 }
 
-pub fn toggle(conn: &mut SqliteConnection, cid: i32) -> String {
+pub fn toggle(conn: &mut SqliteConnection, cid: i32) -> QueryResult<Prestation> {
   use prestations::dsl::{id};
 
   let prestation = prestations::dsl::prestations
@@ -21,7 +20,7 @@ pub fn toggle(conn: &mut SqliteConnection, cid: i32) -> String {
     .first::<Prestation>(conn)
     .expect("Prestation not found");
 
-  serde_json::to_string(&prestation).unwrap()
+  Ok(prestation)
 }
 
 pub fn create(conn: &mut SqliteConnection, payload: CreatePrestationPayload) -> QueryResult<Prestation> {

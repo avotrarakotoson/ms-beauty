@@ -4,7 +4,7 @@ import { PrestationSold } from 'src/app/models';
 
 // Get Action
 export const mSBeautyPrestationSold = createAction(
-  '[PrestationSold] MSBeauty PrestationSold '
+  '[PrestationSold] MSBeauty PrestationSold',
 );
 export const mSBeautyPrestationSoldSuccess = createAction(
   '[PrestationSold] MSBeauty PrestationSold Success',

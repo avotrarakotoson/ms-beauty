@@ -3,7 +3,7 @@ INSERT INTO items ("label")
 VALUES
   ("Shampooing"),
   ("Soins"),
-  ("Brushung"),
+  ("Brushing"),
   ("Coupe"),
   ("Couleur"),
   ("Meches"),

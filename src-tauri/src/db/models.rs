@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 use diesel::prelude::*;
+use diesel::sql_types::{Integer, Text};
 use chrono::NaiveDateTime;
 use crate::schema::*;
 
@@ -105,13 +106,26 @@ pub struct NewSaleDetails {
 }
 
 // Sales
-#[derive(Identifiable, Queryable, Associations, Debug, PartialEq, Serialize, Clone)]
+#[derive(Identifiable, Queryable, QueryableByName, Associations, Debug, PartialEq, Serialize, Clone)]
 #[diesel(belongs_to(Customer))]
 pub struct Agenda {
+  #[diesel(sql_type = Integer)]
   pub id: i32,
+
+  #[diesel(sql_type = Text)]
   pub agenda_date: String,
+
+  #[diesel(sql_type = Text)]
   pub comment: Option<String>,
+
+  #[diesel(sql_type = Integer)]
   pub customer_id: Option<i32>,
+}
+
+#[derive(QueryableByName, Serialize, Debug, Clone)]
+pub struct AgendaDate {
+  #[diesel(sql_type = Text)]
+  pub agenda_date: String,
 }
 
 #[derive(Insertable, AsChangeset, Serialize, Debug, Clone)]

@@ -1,19 +1,18 @@
 use diesel::prelude::*;
 use diesel::result::Error;
-use crate::models::{Item, NewItem};
+use crate::db::models::{Item, NewItem};
 use crate::schema::items;
 use crate::dtos::{CreateItemPayload};
 
-pub fn list(conn: &mut SqliteConnection) -> String {
-  let all_items = items::dsl::items
+pub fn list(conn: &mut SqliteConnection) -> QueryResult<Vec<Item>> {
+  let items = items::dsl::items
       .load::<Item>(conn)
       .expect("Error loading items");
 
-  let serialized = serde_json::to_string(&all_items).unwrap();
-  serialized
+  Ok(items)
 }
 
-pub fn toggle(conn: &mut SqliteConnection, cid: i32) -> String {
+pub fn toggle(conn: &mut SqliteConnection, cid: i32) -> QueryResult<Item> {
   use items::dsl::{id};
 
   let item = items::dsl::items
@@ -21,7 +20,7 @@ pub fn toggle(conn: &mut SqliteConnection, cid: i32) -> String {
     .first::<Item>(conn)
     .expect("Item not found");
 
-  serde_json::to_string(&item).unwrap()
+  Ok(item)
 }
 
 pub fn create(conn: &mut SqliteConnection, payload: CreateItemPayload) -> QueryResult<Item> {

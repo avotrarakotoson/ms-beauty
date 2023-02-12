@@ -1,14 +1,21 @@
 use diesel::prelude::*;
 use diesel::result::Error;
-use crate::models::{Customer, Sale, NewSale, SaleDetails, NewSaleDetails};
+use serde::{Serialize, Deserialize};
+use crate::db::models::{Customer, Sale, NewSale, SaleDetails, NewSaleDetails};
 use crate::schema::{sales, sales_details};
 use crate::dtos::{CreateSalePayload, SaleDto};
 use crate::customer;
 use chrono::NaiveDateTime;
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SaleFilter {
+  limit: Option<i32>
+}
+
 pub fn list(conn: &mut SqliteConnection) -> QueryResult<Vec<SaleDto>> {
   conn.transaction::<_, Error, _>(|conn| {
     let sales: Vec<Sale> = sales::dsl::sales
+      .order(sales::id.desc())
       .load::<Sale>(conn)
       .expect("Error loading sale");
 
@@ -45,6 +52,8 @@ pub fn list_by_customer_id(conn: &mut SqliteConnection, cid: i32) -> QueryResult
   conn.transaction::<_, Error, _>(|conn| {
     let customer = customer::toggle(conn, cid).unwrap();
     let sales: Vec<Sale> = Sale::belonging_to(&customer)
+      .order(sales::id.desc())
+      .limit(10)
       .load::<Sale>(conn)
       .expect("Error loading sale");
 

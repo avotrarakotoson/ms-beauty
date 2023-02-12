@@ -7,7 +7,6 @@ use diesel::SqliteConnection;
 use std::env;
 use std::{sync::Mutex};
 
-
 pub mod omb;
 pub mod db;
 pub mod schema;
@@ -17,32 +16,15 @@ pub mod item;
 pub mod prestation;
 pub mod sale;
 pub mod agenda;
-
-#[path = "db/models.rs"]
-pub mod models;
-
-#[path = "command/cmd_customer.rs"]
-pub mod customer_command;
-
-#[path = "command/cmd_item.rs"]
-pub mod item_command;
-
-#[path = "command/cmd_prestation.rs"]
-pub mod prestation_command;
-
-#[path = "command/cmd_sale_prestation.rs"]
-pub mod sale_prestation_command;
-
-#[path = "command/cmd_agenda.rs"]
-pub mod agenda_command;
+pub mod cmd;
 
 pub struct AppState {
   conn: Mutex<SqliteConnection>,
 }
 
 fn main() {
-  let mut conn = db::establish_connection();
-  db::run_migration(&mut conn);
+  let conn = db::establish_connection_and_migrate_database();
+
   let state = AppState {
     conn: Mutex::new(conn),
   };
@@ -51,26 +33,27 @@ fn main() {
   let app = tauri::Builder::default()
       .manage(state)
       .invoke_handler(tauri::generate_handler![
-        customer_command::get_all_customer,
-        customer_command::get_customer,
-        customer_command::create_customer,
-        customer_command::update_customer,
-        customer_command::delete_customer,
-        item_command::get_all_item,
-        item_command::get_item,
-        item_command::create_item,
-        item_command::delete_item,
-        prestation_command::get_all_prestation,
-        prestation_command::get_prestation,
-        prestation_command::create_prestation,
-        prestation_command::update_prestation,
-        prestation_command::delete_prestation,
-        sale_prestation_command::create_sale_prestation,
-        sale_prestation_command::get_all_sales,
-        sale_prestation_command::get_all_sale_by_customer_id,
-        agenda_command::create_agenda,
-        agenda_command::get_all_agendas,
-        agenda_command::get_all_agenda_by_customer_id,
+        cmd::customer::get_all_customer,
+        cmd::customer::get_customer,
+        cmd::customer::create_customer,
+        cmd::customer::update_customer,
+        cmd::customer::delete_customer,
+        cmd::item::get_all_item,
+        cmd::item::get_item,
+        cmd::item::create_item,
+        cmd::item::delete_item,
+        cmd::prestation::get_all_prestation,
+        cmd::prestation::get_prestation,
+        cmd::prestation::create_prestation,
+        cmd::prestation::update_prestation,
+        cmd::prestation::delete_prestation,
+        cmd::sale_prestation::create_sale_prestation,
+        cmd::sale_prestation::get_all_sales,
+        cmd::sale_prestation::get_all_sale_by_customer_id,
+        cmd::agenda::create_agenda,
+        cmd::agenda::get_all_agendas,
+        cmd::agenda::get_all_agenda_by_customer_id,
+        cmd::agenda::get_agenda_date,
       ])
       .plugin(omb::fs::FsExtra::default())
       .build(context)

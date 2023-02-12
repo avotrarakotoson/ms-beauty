@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { invoke } from '@tauri-apps/api';
-import { from, map, Observable } from 'rxjs';
+import { from, map, Observable, of, tap } from 'rxjs';
 import { Agenda, AgendaFromCmd } from 'src/app/models';
 import { CreateAgendaDto } from '../dtos/agenda.dto';
 
@@ -54,6 +54,21 @@ export class AgendaService {
       )
   }
 
+  getLastOrNextMeetDate(filter: { isNext: boolean; customerId: number }): Observable<string> {
+    return from(invoke('get_agenda_date', {
+      filter: {
+        is_next: filter.isNext,
+        customer_id: filter.customerId
+      }
+    }))
+    .pipe(
+      map((result: any) => {
+        let agenda: { agenda_date: string; } = JSON.parse(result);
+        return agenda.agenda_date;
+      })
+    );
+  }
+
   getOne(id: number): Observable<Agenda> {
     return from(invoke('get_agenda', { id }))
       .pipe(
@@ -74,15 +89,15 @@ export class AgendaService {
       )
   }
 
-  create(payload: CreateAgendaDto): Observable<Agenda> {
+  create(agenda: CreateAgendaDto): Observable<Agenda> {
     console.log('Create...');
 
     return from(invoke('create_agenda', {
       payload : {
-        agenda_date: payload.agendaDate,
-        comment: payload.comment,
-        customer_id: payload.customerId,
-        prestations: payload.prestations.map(prestation => {
+        agenda_date: agenda.agendaDate,
+        comment: agenda.comment,
+        customer_id: agenda.customerId,
+        prestations: agenda.prestations.map(prestation => {
           return {
             title: prestation.title,
             items: prestation.items.join(', '),

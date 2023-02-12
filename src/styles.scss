@@ -66,10 +66,8 @@ body { margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 
 .ms-flex-between {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .ms-flex-start-center {
@@ -222,10 +220,15 @@ h1 {
     }
 
     .ms-total {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
       padding: 10px 20px;
       border-right: 4px solid #E9E9E9;
 
       .count {
+        text-align: end;
+        width: 50px;
         font-size: xx-large;
         font-weight: bolder;
       }
@@ -290,4 +293,76 @@ h1 {
 
 .ms-modal-actions {
   padding: 0 24px;
+}
+
+.ms-content-table-head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .icon {
+    cursor: pointer;
+  }
+}
+
+// Table responsive
+@media screen and (max-width: 960px) {
+  .mat-table {
+    border: 0;
+    vertical-align: middle
+  }
+
+  .mat-table caption {
+    font-size: 1em;
+  }
+
+  // Enable this to hide header
+  .mat-table .mat-header-cell {
+
+    border: 10px solid;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  .mat-table .mat-row {
+    border-bottom: 5px solid #ddd;
+    display: block;
+  }
+
+  /*
+  .mat-table .mat-row:nth-child(even) {background: #CCC}
+  .mat-table .mat-row:nth-child(odd) {background: #FFF}
+  */
+
+  .mat-table .mat-cell {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 1em;
+    text-align: right;
+    font-weight: bold;
+    height:30px;
+    margin-bottom: 4%;
+  }
+  .mat-table .mat-cell:before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    text-transform: uppercase;
+    font-weight: normal;
+
+    font-size: .85em;
+  }
+  .mat-table .mat-cell:last-child {
+    border-bottom: 0;
+  }
+    .mat-table .mat-cell:first-child {
+    margin-top: 4%;
+  }
 }

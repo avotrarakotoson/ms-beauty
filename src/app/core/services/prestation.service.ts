@@ -110,14 +110,14 @@ export class PrestationService {
       )
   }
 
-  create(payload: CreatePrestationDto): Observable<Prestation> {
+  create(prestation: CreatePrestationDto): Observable<Prestation> {
     return from(invoke('create_prestation', {
       payload : {
-        title: payload.title,
-        items: payload.items.join(', '),
-        description: payload.description,
-        rate: payload.rate,
-        currency: payload.currency,
+        title: prestation.title,
+        items: prestation.items.join(', '),
+        description: prestation.description,
+        rate: prestation.rate,
+        currency: prestation.currency,
       }
     }))
     .pipe(
@@ -132,16 +132,16 @@ export class PrestationService {
     )
   }
 
-  update(payload: UpdatePrestationDto): Observable<boolean> {
+  update(prestation: UpdatePrestationDto): Observable<boolean> {
     return from(invoke('update_prestation', {
       payload : {
-        id: payload.id,
+        id: prestation.id,
         prestation: {
-          title: payload.title,
-          items: payload.items.join(', '),
-          description: payload.description,
-          rate: payload.rate,
-          currency: payload.currency,
+          title: prestation.title,
+          items: prestation.items.join(', '),
+          description: prestation.description,
+          rate: prestation.rate,
+          currency: prestation.currency,
         }
       }
     }))

@@ -6,6 +6,9 @@ import { AddItemComponent } from 'src/app/components/add-item/add-item.component
 import { AddPrestationComponent } from 'src/app/components/add-prestation/add-prestation.component';
 import { AddReservationComponent } from 'src/app/components/add-reservation/add-reservation.component';
 import { ConfirmDeleteComponent } from '../components/confirm-delete/confirm-delete.component';
+import { DateAgendaComponent } from '../components/date-agenda/date-agenda.component';
+import { LoaderComponent } from '../components/loader/loader.component';
+import { SoldPrestationComponent } from '../components/sold-prestation/sold-prestation.component';
 
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
@@ -32,7 +35,10 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { SoldPrestationComponent } from '../components/sold-prestation/sold-prestation.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { IsBirthdayPipe } from '../core/pipes/is-birthday.pipe';
+import { JoinPipe } from '../core/pipes/join.pipe';
+import { DefaultViewPipe } from '../core/pipes/default-view.pipe';
 
 const materialModule = [
   FormsModule,
@@ -61,6 +67,7 @@ const materialModule = [
   MatIconModule,
   MatExpansionModule,
   NgSelectModule,
+  MatProgressSpinnerModule,
   FullCalendarModule,
 ]
 
@@ -72,6 +79,13 @@ const materialModule = [
     AddReservationComponent,
     ConfirmDeleteComponent,
     SoldPrestationComponent,
+    DateAgendaComponent,
+    LoaderComponent,
+
+    // Pipes
+    IsBirthdayPipe,
+    JoinPipe,
+    DefaultViewPipe,
   ],
   imports: [
     CommonModule,
@@ -86,6 +100,13 @@ const materialModule = [
     AddReservationComponent,
     ConfirmDeleteComponent,
     SoldPrestationComponent,
+    DateAgendaComponent,
+    LoaderComponent,
+
+    // Pipes
+    IsBirthdayPipe,
+    JoinPipe,
+    DefaultViewPipe,
   ]
 })
 export class SharedModule { }

@@ -29,10 +29,10 @@ export class ItemService {
       )
   }
 
-  create(paylaod: CreateItemDto): Observable<Item> {
+  create(item: CreateItemDto): Observable<Item> {
     return from(invoke('create_item', {
       payload: {
-        label: paylaod.label
+        label: item.label
       }
     }))
     .pipe(

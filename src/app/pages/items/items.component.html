@@ -2,15 +2,19 @@
   <div class="ms-content-header">
     <div class="ms-left">
       <div class="ms-total">
-        <ng-container *ngIf="items$ | async as items">
-          <span class="count">{{ items.length }}</span> Item(s)
-        </ng-container>
+        <span class="count">
+          <ng-container *ngIf="items$ | async as items; else zero">
+            {{ items.length }}
+          </ng-container>
+          <ng-template #zero>0</ng-template>
+        </span>
+        <span>Item(s)</span>
       </div>
     </div>
 
     <div class="ms-right">
       <div class="ms-search">
-        <input type="text" matInput placeholder="Recherche item ex: Brushing">
+        <input type="text" matInput placeholder="Recherche item ex: Brushing" (input)="searchItem($event)">
       </div>
 
       <button mat-flat-button extended color="primary" aria-label="Nouveau item" (click)="addItemModal()">

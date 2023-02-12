@@ -118,7 +118,7 @@ export class AgendaComponent implements OnInit {
         <div style="padding: 0 10px; color: #fff">
           <div>${ renderProps.timeText }</div>
           <div>${ renderProps.event.title }</div>
-          <div>${ this.getFullName(renderProps.event.extendedProps['fullName']) }</div>
+          <div>${ renderProps.event.extendedProps['fullName'] }</div>
         <div>
       `;
 
@@ -128,12 +128,6 @@ export class AgendaComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(mSBeautyAgenda());
-  }
-
-  getFullName(value: string | undefined): string {
-    if (!value) return '';
-
-    return value;
   }
 
   addReservationModal() {

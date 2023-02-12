@@ -105,12 +105,15 @@
       }
 
       .item-reducer {
+        margin-top: 25px;
         height: 25px;
         display: flex;
         justify-content: space-between;
+        align-items: center;
 
         input {
           width: 60px;
+          height: 15px;
           padding: 5px 10px;
         }
       }

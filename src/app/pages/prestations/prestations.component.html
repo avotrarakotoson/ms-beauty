@@ -2,21 +2,19 @@
   <div class="ms-content-header">
     <div class="ms-left">
       <div class="ms-total">
-        <ng-container *ngIf="prestations$ | async as prestations">
-          <span class="count">{{ prestations.length }}</span> Prestation(s)
-        </ng-container>
-      </div>
-      <div class="ms-filter">
-        <label for="">Trier par: </label>
-        <select class="ms-filter-select" name="" id="">
-          <option value="">Titre</option>
-        </select>
+        <span class="count">
+          <ng-container *ngIf="prestations$ | async as prestations; else zero">
+            {{ prestations.length }}
+          </ng-container>
+          <ng-template #zero>0</ng-template>
+        </span>
+        <span>Prestation(s)</span>
       </div>
     </div>
 
     <div class="ms-right">
       <div class="ms-search">
-        <input type="text" matInput placeholder="Recherche prestation ex: Permanente">
+        <input type="text" matInput placeholder="Recherche prestation ex: Permanente" (input)="searchPrestation($event)">
       </div>
 
       <button mat-flat-button extended color="primary" aria-label="Nouveau client" (click)="addPrestationModal()">
@@ -31,17 +29,31 @@
     <ng-container *ngIf="prestations$ | async as prestations">
       <table mat-table [dataSource]="prestations" class="mat-elevation-z8 ms-table-fix-height">
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Prestation </th>
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="ms-content-table-head">
+              <span>Prestation</span>
+              <span class="icon" (click)="tarifSortAsc = !tarifSortAsc; onSort('title')">
+                <img src="assets/icons/up-down-arrow.png" alt="Sort Up" width="20">
+              </span>
+            </div>
+          </th>
           <td mat-cell *matCellDef="let element"> {{ element.title }}</td>
         </ng-container>
 
         <ng-container matColumnDef="item">
           <th mat-header-cell *matHeaderCellDef> Pack </th>
-          <td mat-cell *matCellDef="let element"> {{ getItems(element.items) }} </td>
+          <td mat-cell *matCellDef="let element"> {{ element.items | join: ', ' }} </td>
         </ng-container>
 
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef> Prix </th>
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="ms-content-table-head">
+              <span>Tarif</span>
+              <span class="icon" (click)="tarifSortAsc = !tarifSortAsc; onSort('rate')">
+                <img src="assets/icons/up-down-arrow.png" alt="Sort Up" width="20">
+              </span>
+            </div>
+          </th>
           <td mat-cell *matCellDef="let element">
             <span>{{ element.rate }} {{ element.currency | uppercase }}</span>
           </td>

@@ -1,16 +1,15 @@
 use diesel::prelude::*;
 use diesel::result::Error;
-use crate::models::{Customer, NewOrUpdateCustomer};
+use crate::db::models::{Customer, NewOrUpdateCustomer};
 use crate::schema::customers;
 use crate::dtos::{CreateCustomerPayload, UpdateCustomerPayload};
 
-pub fn list(conn: &mut SqliteConnection) -> String {
-  let all_customers = customers::dsl::customers
+pub fn list(conn: &mut SqliteConnection) -> QueryResult<Vec<Customer>> {
+  let customers = customers::dsl::customers
       .load::<Customer>(conn)
       .expect("Error loading customers");
 
-  let serialized = serde_json::to_string(&all_customers).unwrap();
-  serialized
+  Ok(customers)
 }
 
 pub fn toggle(conn: &mut SqliteConnection, cid: i32) -> QueryResult<Customer> {

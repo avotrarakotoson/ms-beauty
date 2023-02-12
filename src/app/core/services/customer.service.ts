@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, map, Observable, of } from 'rxjs';
+import { map, Observable, of, firstValueFrom, from } from 'rxjs';
 import { Customer, CustomerFromCmd } from 'src/app/models';
 import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customer.dto';
 import { invoke } from '@tauri-apps/api';
@@ -10,7 +10,7 @@ const USER_DATA = [
     firstName: "Avotra",
     lastName: "Rakotoson",
     gender: "Homme",
-    dob: "12/14/1997",
+    dob: "01/27/1997",
     email: "avotra@gmail.com ",
     address: "",
     primaryPhone: "+261 34 93 543 89",
@@ -89,15 +89,15 @@ export class CustomerService {
       )
   }
 
-  create(payload: CreateCustomerDto): Observable<Customer> {
+  create(customer: CreateCustomerDto): Observable<Customer> {
     return from(invoke('create_customer', {
       payload : {
-        last_name: payload.lastName,
-        first_name: payload.firstName,
-        gender: payload.gender,
-        dob: payload.dob,
-        email: payload.email,
-        primary_phone: payload.primaryPhone
+        last_name: customer.lastName,
+        first_name: customer.firstName,
+        gender: customer.gender,
+        dob: customer.dob,
+        email: customer.email,
+        primary_phone: customer.primaryPhone
       }
     }))
     .pipe(
@@ -116,17 +116,17 @@ export class CustomerService {
     )
   }
 
-  update(payload: UpdateCustomerDto): Observable<boolean> {
+  update(customer: UpdateCustomerDto): Observable<boolean> {
     return from(invoke('update_customer', {
       payload : {
-        id: payload.id,
+        id: customer.id,
         customer: {
-          last_name: payload.lastName,
-          first_name: payload.firstName,
-          gender: payload.gender,
-          dob: payload.dob,
-          email: payload.email,
-          primary_phone: payload.primaryPhone
+          last_name: customer.lastName,
+          first_name: customer.firstName,
+          gender: customer.gender,
+          dob: customer.dob,
+          email: customer.email,
+          primary_phone: customer.primaryPhone
         }
       }
     }))
